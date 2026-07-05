@@ -1008,28 +1008,32 @@ def build_capability_ladder(prs: Presentation):
         y = top
         fill, border, tcol = PALETTE[kind]
 
-        # numbered chip sitting above the card (well clear of the title bar)
-        chip_w = Inches(0.5); chip_h = Inches(0.5)
-        chip = slide.shapes.add_shape(
-            MSO_SHAPE.OVAL,
-            int(x + box_w / 2 - chip_w / 2), int(y - chip_h / 2),
-            chip_w, chip_h,
-        )
-        chip.fill.solid(); chip.fill.fore_color.rgb = hex_to_rgb(border)
-        chip.line.color.rgb = hex_to_rgb(border)
-        ctf = chip.text_frame; ctf.vertical_anchor = MSO_ANCHOR.MIDDLE
-        cp = ctf.paragraphs[0]; cp.alignment = PP_ALIGN.CENTER
-        cr = cp.add_run(); cr.text = str(i + 1)
-        cr.font.size = Pt(13); cr.font.bold = True
-        cr.font.color.rgb = hex_to_rgb("#FFFFFF"); cr.font.name = "Segoe UI"
-
-        # step card
+        # step card FIRST so the numbered chip can sit on top of it
         add_box(
             slide, x, y, box_w, box_h,
             fill, border, body,
             title=name, title_size=13, font_size=11,
             title_color=tcol, text_color=tcol, align_left=True,
         )
+
+        # numbered chip — bigger, higher, drawn AFTER the card so it's visible
+        chip_w = Inches(0.65); chip_h = Inches(0.65)
+        chip = slide.shapes.add_shape(
+            MSO_SHAPE.OVAL,
+            int(x + box_w / 2 - chip_w / 2), int(y - chip_h + Inches(0.18)),
+            chip_w, chip_h,
+        )
+        chip.fill.solid(); chip.fill.fore_color.rgb = hex_to_rgb(border)
+        chip.line.color.rgb = hex_to_rgb("#FFFFFF")
+        chip.line.width = Pt(2)
+        ctf = chip.text_frame
+        ctf.margin_left = Emu(0); ctf.margin_right = Emu(0)
+        ctf.margin_top = Emu(0); ctf.margin_bottom = Emu(0)
+        ctf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        cp = ctf.paragraphs[0]; cp.alignment = PP_ALIGN.CENTER
+        cr = cp.add_run(); cr.text = str(i + 1)
+        cr.font.size = Pt(20); cr.font.bold = True
+        cr.font.color.rgb = hex_to_rgb("#FFFFFF"); cr.font.name = "Segoe UI"
 
         # arrow to next step (horizontal, level with card middle)
         if i < n - 1:
@@ -1089,6 +1093,22 @@ def build_architecture_v2(prs: Presentation):
             ay = row1_top + row1_h / 2 - Inches(0.11)
             _arrow_shape(slide, ax - Inches(0.02), ay, gap1 + Inches(0.04),
                          Inches(0.22), "right", "#3B7DDD")
+
+    # Distinguish API Gateway (HTTP concerns) from AI Gateway (model concerns)
+    api_x = left_pad + (bw1 + gap1) * 3
+    ai_x  = left_pad + (bw1 + gap1) * 4
+    cap_y = row1_top + row1_h + Inches(0.02)
+    # Left-aligned so captions sit clear of the centered down-arrow
+    add_text(
+        slide, api_x + Inches(0.05), cap_y, bw1 - Inches(0.1), Inches(0.28),
+        "OAuth · TLS · quota",
+        size=8.5, italic=True, color="#3B7DDD", align=PP_ALIGN.LEFT,
+    )
+    add_text(
+        slide, ai_x + Inches(0.05), cap_y, bw1 - Inches(0.1), Inches(0.28),
+        "Routing · retries · circuit",
+        size=8.5, italic=True, color="#8E44AD", align=PP_ALIGN.LEFT,
+    )
 
     # -------- Row 2: Router / Planner (centered wide box) -------- #
     row2_top = row1_top + row1_h + Inches(0.35)
@@ -1434,7 +1454,7 @@ def build_platform_services(prs: Presentation):
     )
 
     services = [
-        ("Redis / Cache",       "Semantic · prompt · response caches",      "cache"),
+        ("L11 Cache Manager",   "Prompt · semantic · embedding\nmemory · response caches",  "cache"),
         ("Kafka / Event Bus",   "Async pipelines · streaming events",       "obs"),
         ("Scheduler",           "Cron · workflows · DAGs · Airflow / Argo", "neutral"),
         ("Configuration",       "App Config · Consul · git-versioned",      "neutral"),
@@ -1580,27 +1600,210 @@ def build_deployment_view(prs: Presentation):
 
 # ---------- main ---------- #
 
+def build_three_planes(prs: Presentation):
+    """Control / Data / Management planes — Kubernetes-style separation."""
+    slide, W, H = slide_bg(prs)
+    title_bar(slide, W, subtitle_right="Control · Data · Management planes")
+
+    add_text(
+        slide, Inches(0.35), Inches(0.85), W - Inches(0.7), Inches(0.5),
+        "Enterprise AI has three planes — just like Kubernetes. "
+        "Confusing them is how governance, cost and reliability go wrong.",
+        size=13, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
+    )
+
+    planes = [
+        ("Control Plane",
+         "Decides · governs · configures",
+         "neutral",
+         [
+             "Policy Engine (OPA · Cedar)",
+             "Configuration store",
+             "Model Registry",
+             "Prompt Registry",
+             "Workflow Registry",
+             "Tool Registry",
+             "Feature Flags",
+             "Model routing rules",
+             "Rate-limit + quota rules",
+         ]),
+        ("Data Plane",
+         "Runs · executes · serves traffic",
+         "data",
+         [
+             "Prompts & context assembly",
+             "Embeddings & retrieval",
+             "Model inference calls",
+             "Tool executions (MCP)",
+             "Verification checkers",
+             "Guardrail evaluators",
+             "Streaming responses",
+             "Cache reads / writes",
+             "Event bus messages",
+         ]),
+        ("Management Plane",
+         "Observes · pays · improves",
+         "obs",
+         [
+             "CI / CD pipelines",
+             "OpenTelemetry traces & metrics",
+             "Cost dashboards & budgets",
+             "Alerting & on-call",
+             "Governance & audit logs",
+             "Compliance evidence",
+             "LLMOps eval & benchmarks",
+             "Incident response",
+             "Capacity + quota planning",
+         ]),
+    ]
+
+    top = Inches(1.55)
+    n = len(planes)
+    left_pad = Inches(0.35)
+    total_w = W - Inches(0.7)
+    gap = Inches(0.2)
+    box_w = (total_w - gap * (n - 1)) / n
+    box_h = H - top - Inches(0.55)
+
+    for i, (title, sub, kind, items) in enumerate(planes):
+        x = left_pad + (box_w + gap) * i
+        fill, border, tcol = PALETTE[kind]
+        shp = slide.shapes.add_shape(
+            MSO_SHAPE.ROUNDED_RECTANGLE, x, top, box_w, box_h)
+        shp.fill.solid(); shp.fill.fore_color.rgb = hex_to_rgb(fill)
+        shp.line.color.rgb = hex_to_rgb(border); shp.line.width = Pt(1.5)
+        tf = shp.text_frame
+        tf.margin_left = Inches(0.18); tf.margin_right = Inches(0.14)
+        tf.margin_top = Inches(0.18); tf.margin_bottom = Inches(0.14)
+        tf.word_wrap = True; tf.vertical_anchor = MSO_ANCHOR.TOP
+
+        p1 = tf.paragraphs[0]; p1.alignment = PP_ALIGN.LEFT
+        r1 = p1.add_run(); r1.text = title
+        r1.font.size = Pt(18); r1.font.bold = True
+        r1.font.color.rgb = hex_to_rgb(tcol); r1.font.name = "Segoe UI"
+
+        p2 = tf.add_paragraph(); p2.alignment = PP_ALIGN.LEFT
+        r2 = p2.add_run(); r2.text = sub
+        r2.font.size = Pt(11); r2.font.italic = True
+        r2.font.color.rgb = hex_to_rgb(tcol); r2.font.name = "Segoe UI"
+
+        # spacer
+        ps = tf.add_paragraph()
+        rs = ps.add_run(); rs.text = " "
+        rs.font.size = Pt(4)
+
+        for item in items:
+            pi = tf.add_paragraph(); pi.alignment = PP_ALIGN.LEFT
+            ri = pi.add_run(); ri.text = "•  " + item
+            ri.font.size = Pt(11); ri.font.name = "Segoe UI"
+            ri.font.color.rgb = hex_to_rgb(tcol)
+
+    slide_footer(slide, W, H)
+
+
+def build_adrs(prs: Presentation):
+    """Architecture Decision Records — every big choice is written down."""
+    slide, W, H = slide_bg(prs)
+    title_bar(slide, W, subtitle_right="Architecture Decision Records (ADRs)")
+
+    add_text(
+        slide, Inches(0.35), Inches(0.85), W - Inches(0.7), Inches(0.55),
+        "Every consequential architectural choice in EASRA is recorded as an ADR. "
+        "Not a deliverable — a first-class artefact of the standard.",
+        size=13, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
+    )
+
+    adrs = [
+        ("ADR-001", "Verification is separate from Evaluation",
+         "Runtime verifiers vs. offline eval — different lifecycles, different owners.", "security"),
+        ("ADR-002", "Memory is externalised",
+         "Compute stays stateless. Sessions, profiles, episodic memory live outside.", "data"),
+        ("ADR-003", "Prompt Registry is mandatory",
+         "Prompts are versioned code, not literals — enables A/B, rollback, audit.", "data"),
+        ("ADR-004", "AI Gateway is separate from API Gateway",
+         "Model routing, token budgets, retries, circuit breakers ≠ HTTP concerns.", "model"),
+        ("ADR-005", "Tool Registry with impact class is mandatory",
+         "Every tool has an impact class; HITL for high-impact; audit for all.", "data"),
+        ("ADR-006", "Cache Manager is centralised",
+         "One component for prompt · semantic · embedding · memory · response caches.", "cache"),
+        ("ADR-007", "Async work uses an Event Bus, not sync calls",
+         "Batch, embedding, re-index, long-running agents — Kafka / Event Hub.", "obs"),
+        ("ADR-008", "Control / Data / Management planes are separated",
+         "Governance, runtime and operations scale independently.", "neutral"),
+        ("ADR-009", "Standards are mapped, not replaced",
+         "NIST · ISO 42001 · EU AI Act · OWASP LLM · MITRE ATLAS — complements, doesn’t compete.", "neutral"),
+        ("ADR-010", "Dual license: CC-BY-4.0 docs · Apache-2.0 code",
+         "Docs freely adaptable; code freely usable in commercial products.", "entry"),
+    ]
+
+    cols = 2
+    rows = 5
+    top = Inches(1.55)
+    left_pad = Inches(0.35)
+    total_w = W - Inches(0.7)
+    col_gap = Inches(0.2)
+    row_gap = Inches(0.12)
+    col_w = (total_w - col_gap) / cols
+    total_h = H - top - Inches(0.5)
+    row_h = (total_h - row_gap * (rows - 1)) / rows
+
+    for i, (code, name, body, kind) in enumerate(adrs):
+        col = i // rows
+        row = i % rows
+        x = left_pad + (col_w + col_gap) * col
+        y = top + (row_h + row_gap) * row
+        fill, border, tcol = PALETTE[kind]
+
+        # ADR code chip on the left
+        chip_w = Inches(1.05)
+        chip = slide.shapes.add_shape(
+            MSO_SHAPE.ROUNDED_RECTANGLE, x, y, chip_w, row_h)
+        chip.fill.solid(); chip.fill.fore_color.rgb = hex_to_rgb(border)
+        chip.line.color.rgb = hex_to_rgb(border)
+        ctf = chip.text_frame
+        ctf.margin_left = Inches(0.05); ctf.margin_right = Inches(0.05)
+        ctf.vertical_anchor = MSO_ANCHOR.MIDDLE; ctf.word_wrap = True
+        cp = ctf.paragraphs[0]; cp.alignment = PP_ALIGN.CENTER
+        cr = cp.add_run(); cr.text = code
+        cr.font.size = Pt(13); cr.font.bold = True
+        cr.font.color.rgb = hex_to_rgb("#FFFFFF"); cr.font.name = "Segoe UI"
+
+        body_left = x + chip_w + Inches(0.1)
+        body_w = col_w - chip_w - Inches(0.1)
+        add_box(
+            slide, body_left, y, body_w, row_h,
+            fill, border, body,
+            title=name, title_size=12, font_size=10.5,
+            title_color=tcol, text_color=tcol, align_left=True,
+        )
+
+    slide_footer(slide, W, H,
+                 text="ADRs live under docs/adr/. Each one has context · decision · consequences · status · date.")
+
+
 def main():
     prs = Presentation()
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
 
-    build_hero_v2(prs)               # 1   Cover (benefits, not stats)
-    build_problem(prs)               # 2   Problem
-    build_what_is(prs)               # 3   What is EASRA?
-    build_capability_ladder(prs)     # 4   TOGAF-style ladder      [NEW]
-    build_principles(prs)            # 5   Ten design principles
-    build_layer_index(prs)           # 6   Sixteen layers
-    build_architecture_v2(prs)       # 7   Production runtime arch [REDESIGN]
-    build_runtime_sequence(prs)      # 8   Sequence diagram        [REDESIGN]
-    build_trust_boundaries(prs)      # 9   Four trust boundaries
-    build_verification_pipeline(prs) # 10  Verification pipeline   [NEW]
-    build_platform_services(prs)     # 11  Platform services       [NEW]
-    build_deployment_view(prs)       # 12  Deployment view         [NEW]
-    build_llmops(prs)                # 13  LLMOps & delivery
-    build_cloud_mapping(prs)         # 14  Cloud implementations
-    build_standards(prs)             # 15  Standards mapping
-    build_cta(prs)                   # 16  CTA
+    build_hero_v2(prs)                # 1   Cover (benefits, not stats)
+    build_problem(prs)                # 2   Problem
+    build_what_is(prs)                # 3   What is EASRA?
+    build_capability_ladder(prs)      # 4   Capability ladder
+    build_principles(prs)             # 5   Ten design principles
+    build_layer_index(prs)            # 6   Sixteen layers
+    build_architecture_v2(prs)        # 7   Production runtime arch
+    build_runtime_sequence(prs)       # 8   Sequence diagram
+    build_trust_boundaries(prs)       # 9   Four trust boundaries
+    build_verification_pipeline(prs)  # 10  Verification pipeline
+    build_three_planes(prs)           # 11  Control / Data / Mgmt planes [NEW]
+    build_platform_services(prs)      # 12  Platform services
+    build_deployment_view(prs)        # 13  Deployment view
+    build_llmops(prs)                 # 14  LLMOps & delivery
+    build_cloud_mapping(prs)          # 15  Cloud implementations
+    build_standards(prs)              # 16  Standards mapping
+    build_adrs(prs)                   # 17  Architecture Decision Records [NEW]
+    build_cta(prs)                    # 18  CTA
 
     out = Path(__file__).parent / "EASRA-LinkedIn-Carousel.pptx"
     prs.save(out)
