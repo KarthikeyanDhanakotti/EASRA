@@ -536,6 +536,220 @@ def build_layer_index(prs: Presentation):
     )
 
 
+def build_square_architecture(prs: Presentation):
+    """Single-slide 1:1 (10in x 10in) variant, optimised for LinkedIn mobile feed."""
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    W = prs.slide_width
+    H = prs.slide_height
+
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, W, H)
+    bg.fill.solid()
+    bg.fill.fore_color.rgb = hex_to_rgb("#FFFFFF")
+    bg.line.fill.background()
+
+    # title bar
+    title_h = Inches(0.9)
+    title = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, W, title_h)
+    title.fill.solid()
+    title.fill.fore_color.rgb = hex_to_rgb(PALETTE["titlebar"][0])
+    title.line.fill.background()
+    add_text(
+        slide, Inches(0.35), Inches(0.10), W - Inches(0.7), Inches(0.40),
+        "EASRA",
+        size=22, bold=True, color="#FFFFFF", align=PP_ALIGN.LEFT,
+    )
+    add_text(
+        slide, Inches(0.35), Inches(0.48), W - Inches(0.7), Inches(0.35),
+        "Enterprise AI Systems Reference Architecture",
+        size=14, color="#B8CDEA", align=PP_ALIGN.LEFT,
+    )
+    add_text(
+        slide, Inches(0.35), Inches(0.10), W - Inches(0.7), Inches(0.80),
+        "16 layers  ·  4 trust boundaries  ·  3 planes",
+        size=11, color="#B8CDEA", align=PP_ALIGN.RIGHT,
+    )
+
+    # user pill
+    top = title_h + Inches(0.18)
+    user_h = Inches(0.45)
+    add_box(
+        slide,
+        Inches(0.35), top, W - Inches(0.7), user_h,
+        PALETTE["entry"][0], PALETTE["entry"][1],
+        "Enterprise Users  ·  Web  ·  Mobile  ·  API  ·  Chat  ·  Voice",
+        font_size=11, text_color=PALETTE["entry"][2],
+    )
+
+    area_top = top + user_h + Inches(0.15)
+    area_bottom = H - Inches(1.15)  # room for substrate strip + footer
+    area_height = area_bottom - area_top
+    area_left = Inches(0.35)
+    area_right = W - Inches(0.35)
+
+    gap = Inches(0.14)
+    # square canvas: use 60/40 split so cross-cutting labels still fit
+    left_w = int((area_right - area_left - gap) * 0.60)
+    right_w = (area_right - area_left - gap) - left_w
+
+    # ---- request flow ---- #
+    flow_layers = [
+        ("L0", "Channels & UX", "Web · Mobile · API · Chat · Voice · SDK", "entry"),
+        ("L1", "Edge · Gateway · Identity",
+         "CDN · WAF · LB · Gateway · OIDC · Rate limit · Session · Validator",
+         "entry"),
+        ("L2", "AI Orchestration",
+         "Router · Single agent · Multi-agent · Planner / Workflow",
+         "neutral"),
+        ("L3", "Prompt Intelligence",
+         "Context builder · Prompt builder · Prompt registry",
+         "neutral"),
+        ("split", "L4 Memory  |  L5 Knowledge & Retrieval",
+         "Short/Long/Session/Semantic memory  ||  Vector · BM25 · SQL · Graph · Reranker",
+         "data"),
+        ("L6", "AI Models & Model Router",
+         "Router (capability · cost · latency · policy) · Foundation + specialised · Registry",
+         "model"),
+        ("L7", "Tooling & Actions (MCP)",
+         "Tool router · MCP · Enterprise APIs · Impact-class enforcer · Registry",
+         "data"),
+        ("L8", "Guardrails & Safety",
+         "Input · Prompt · Tool-arg · Output guardrails",
+         "security"),
+        ("L9", "Verification & Streaming",
+         "Grounding · Citation · Factuality · Format · Policy · Safety  →  Formatter · Stream",
+         "security"),
+    ]
+
+    n = len(flow_layers)
+    row_gap = Inches(0.07)
+    row_h = (area_height - row_gap * (n - 1)) / n
+
+    for i, (code, title_text, body, kind) in enumerate(flow_layers):
+        y = area_top + (row_h + row_gap) * i
+        fill, border, text_col = PALETTE[kind]
+        chip_w = Inches(0.72)
+        chip = slide.shapes.add_shape(
+            MSO_SHAPE.ROUNDED_RECTANGLE, area_left, y, chip_w, row_h,
+        )
+        chip.fill.solid()
+        chip.fill.fore_color.rgb = hex_to_rgb(border)
+        chip.line.color.rgb = hex_to_rgb(border)
+        chip.line.width = Pt(0.5)
+        ctf = chip.text_frame
+        ctf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        cp = ctf.paragraphs[0]
+        cp.alignment = PP_ALIGN.CENTER
+        cr = cp.add_run()
+        cr.text = code if code != "split" else "L4·L5"
+        cr.font.size = Pt(12)
+        cr.font.bold = True
+        cr.font.color.rgb = hex_to_rgb("#FFFFFF")
+        cr.font.name = "Segoe UI"
+
+        body_left = area_left + chip_w + Inches(0.06)
+        body_w = left_w - chip_w - Inches(0.06)
+        add_box(
+            slide, body_left, y, body_w, row_h,
+            fill, border, body,
+            title=title_text,
+            title_size=11, font_size=9,
+            title_color=text_col, text_color=text_col,
+            align_left=True,
+        )
+
+    # ---- cross-cutting ---- #
+    right_left = area_left + left_w + gap
+    cc_layers = [
+        ("L10", "Observability", "obs",
+         "OTel  ·  Traces · Metrics · Logs  ·  Tokens · Latency · Cost  ·  Agent/Prompt/Tool trace  ·  Alerts"),
+        ("L13", "Security & Zero Trust", "security",
+         "AuthN · AuthZ  ·  Secrets · Encryption  ·  PII  ·  Policy engine  ·  Audit  ·  Compliance"),
+        ("L14", "Governance · Risk · Compliance", "neutral",
+         "Policy engine · Registries · NIST AI RMF · ISO 42001 · EU AI Act · OWASP LLM"),
+        ("L15", "Business Outcomes & Value", "biz",
+         "KPIs · Value attribution · Cost/benefit · Adoption"),
+    ]
+
+    add_text(
+        slide, right_left, area_top - Inches(0.03), right_w, Inches(0.28),
+        "CROSS-CUTTING PLANES",
+        size=10, bold=True, color="#5A6470",
+        align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.TOP,
+    )
+
+    cc_area_top = area_top + Inches(0.27)
+    cc_area_h = area_height - Inches(0.27)
+    cc_gap = Inches(0.10)
+    cc_n = len(cc_layers)
+    cc_row_h = (cc_area_h - cc_gap * (cc_n - 1)) / cc_n
+
+    for i, (code, title_text, kind, body) in enumerate(cc_layers):
+        y = cc_area_top + (cc_row_h + cc_gap) * i
+        fill, border, text_col = PALETTE[kind]
+        chip_w = Inches(0.72)
+        chip = slide.shapes.add_shape(
+            MSO_SHAPE.ROUNDED_RECTANGLE, right_left, y, chip_w, cc_row_h,
+        )
+        chip.fill.solid()
+        chip.fill.fore_color.rgb = hex_to_rgb(border)
+        chip.line.color.rgb = hex_to_rgb(border)
+        chip.line.width = Pt(0.5)
+        ctf = chip.text_frame
+        ctf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        cp = ctf.paragraphs[0]
+        cp.alignment = PP_ALIGN.CENTER
+        cr = cp.add_run()
+        cr.text = code
+        cr.font.size = Pt(12)
+        cr.font.bold = True
+        cr.font.color.rgb = hex_to_rgb("#FFFFFF")
+        cr.font.name = "Segoe UI"
+
+        body_left = right_left + chip_w + Inches(0.06)
+        body_w = right_w - chip_w - Inches(0.06)
+        add_box(
+            slide, body_left, y, body_w, cc_row_h,
+            fill, border, body,
+            title=title_text,
+            title_size=11, font_size=9,
+            title_color=text_col, text_color=text_col,
+            align_left=True,
+        )
+
+    # ---- platform substrate strip ---- #
+    strip_top = area_bottom + Inches(0.10)
+    strip_h = Inches(0.75)
+    strip_w_each = (area_right - area_left - gap * 2) / 3
+    substrate = [
+        ("L11 · Performance · Caching · Cost",
+         "Prompt · Semantic · Embedding · Memory · Response caches  ·  Cost ledger",
+         "cache"),
+        ("L12 · LLMOps & Delivery",
+         "Git → CI (lint · sec · prompt · eval) → Artefact Registry → CD (canary · shadow · rollback)",
+         "data"),
+        ("Infrastructure Substrate",
+         "Azure · AWS · GCP · Hybrid  ·  Kubernetes  ·  GPU / NPU  ·  Kafka  ·  Multi-region · DR",
+         "neutral"),
+    ]
+    for i, (t, body, kind) in enumerate(substrate):
+        x = area_left + (strip_w_each + gap) * i
+        fill, border, text_col = PALETTE[kind]
+        add_box(
+            slide, x, strip_top, strip_w_each, strip_h,
+            fill, border, body,
+            title=t, title_size=10, font_size=8.5,
+            title_color=text_col, text_color=text_col,
+            align_left=True,
+        )
+
+    # footer
+    add_text(
+        slide, Inches(0.35), H - Inches(0.30), W - Inches(0.7), Inches(0.26),
+        "github.com/KarthikeyanDhanakotti/EASRA  ·  v0.1.0  ·  Karthikeyan Dhanakotti",
+        size=9, color="#8A94A0", align=PP_ALIGN.LEFT,
+    )
+
+
 def main():
     prs = Presentation()
     prs.slide_width = Inches(13.333)
@@ -548,6 +762,15 @@ def main():
     out = Path(__file__).parent / "EASRA-High-Level-Architecture.pptx"
     prs.save(out)
     print(f"Wrote {out}  ({out.stat().st_size / 1024:.1f} KB)")
+
+    # ----- square (1:1) variant for LinkedIn mobile feed ----- #
+    prs_sq = Presentation()
+    prs_sq.slide_width = Inches(10)
+    prs_sq.slide_height = Inches(10)
+    build_square_architecture(prs_sq)
+    out_sq = Path(__file__).parent / "EASRA-High-Level-Architecture-Square.pptx"
+    prs_sq.save(out_sq)
+    print(f"Wrote {out_sq}  ({out_sq.stat().st_size / 1024:.1f} KB)")
 
 
 if __name__ == "__main__":
