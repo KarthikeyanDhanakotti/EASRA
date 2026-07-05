@@ -3,6 +3,8 @@
 
 config:
   default: true
+  # Heading increment — README uses "# Title / ### Subtitle" pattern intentionally.
+  MD001: false
   # Line length — we use one-sentence-per-line and long tables.
   MD013: false
   # Inline HTML — needed for README centering and various inline layout.
