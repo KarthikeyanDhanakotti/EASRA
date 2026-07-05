@@ -70,3 +70,7 @@ EASRA_Version_0.1_Blueprint.txt
 !.env.example
 *.pem
 *.key
+
+# Deck source generators (local-only, not published)
+conference/build_high_level_deck.py
+conference/build_linkedin_carousel.py
