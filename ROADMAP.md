@@ -201,6 +201,21 @@ The architecture explicitly reserves the following extension points; each will g
 - Event bus
 - Async workflows
 
+## Reviewer feedback → roadmap traceability
+
+External reviewers (v0.1 executive-summary carousel) asked for the items below.
+This section shows where each one lives in the plan so contributors can pick them up.
+
+| Reviewer ask | Where it lives | Phase |
+|---|---|---|
+| Memory architecture (Working · Session · Episodic · Semantic · Long-term · Profile · TTL · summarization · compression) | Diagram **D-L3 Memory Architecture** + L4 handbook chapter | Phase 3 → Phase 4 |
+| Knowledge architecture (ingestion · chunking · enrichment · hybrid retrieval · re-rank · freshness · knowledge graphs · federation) | Diagram **D-L4 Knowledge & Retrieval Architecture** + L5 handbook chapter | Phase 3 → Phase 4 |
+| Multi-agent architecture (Planner · Supervisor · Worker · Tool · Reviewer · Critic · HITL) | New diagram **D-L6 Multi-Agent Architecture** (to be added to Logical view) + L2 & L7 handbook | Phase 3 → Phase 4 |
+| Failure modes per layer (scenario · detection · mitigation · recovery · fallback) | New template `templates/failure-modes.md` referenced from every handbook chapter | Phase 4 |
+| Performance budgets per layer (targets, not guarantees) | Extension of Spec 010 NFR into per-layer budget table; enforced in handbook | Phase 4 |
+| Interface contracts per layer (inputs · outputs · state · deps · failure · latency · security · observability) | Spec 006 Interface Specification (already drafted) — will be expanded with a per-layer contract stub in every handbook chapter | Phase 4 |
+| Conformance profiles (Baseline · Regulated · Safety-critical) | Spec 013 Conformance Test Suite + Phase 6 conformance badge programme | Phase 2 → Phase 7 |
+
 ## How to influence the roadmap
 
 - Open a discussion under `Roadmap` on GitHub Discussions.
