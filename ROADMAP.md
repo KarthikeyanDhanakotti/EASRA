@@ -1,6 +1,6 @@
 # EASRA Roadmap
 
-This roadmap describes the planned evolution of EASRA from initial draft to a stable, adoptable v1.0 and beyond. Dates are omitted intentionally — EASRA advances when material is ready, not on a calendar.
+This roadmap describes the planned evolution of EASRA from initial draft to a stable, adoptable v1.0 and beyond. Dates are omitted intentionally - EASRA advances when material is ready, not on a calendar.
 
 ## Guiding release principles
 
@@ -11,41 +11,41 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 
 ---
 
-## Phase 1 — Draft Specification (v0.1)
+## Phase 1 - Draft Specification (v0.1)
 
 **Goal:** publish the complete draft specification and a coherent high-level architecture.
 
 - [x] Repository scaffold and licensing
-- [x] Specification 001 — Introduction, Vision, Scope
-- [x] Specification 002 — Design Principles
-- [x] Specification 003 — Terminology
-- [x] Specification 004 — Reference Architecture (16 layers)
-- [x] Specification 005 — Layer Definitions
-- [x] Specification 006 — Interface Specification
-- [x] Specification 007 — Data Flow
-- [x] Specification 008 — Sequence Diagrams
-- [x] Specification 009 — Trust Boundaries
-- [x] Specification 010 — Non-Functional Requirements
+- [x] Specification 001 - Introduction, Vision, Scope
+- [x] Specification 002 - Design Principles
+- [x] Specification 003 - Terminology
+- [x] Specification 004 - Reference Architecture (16 layers)
+- [x] Specification 005 - Layer Definitions
+- [x] Specification 006 - Interface Specification
+- [x] Specification 007 - Data Flow
+- [x] Specification 008 - Sequence Diagrams
+- [x] Specification 009 - Trust Boundaries
+- [x] Specification 010 - Non-Functional Requirements
 - [x] Publication-grade high-level architecture diagram
 - [x] Trust boundary, deployment-topology, CI/CD, observability diagrams
 - [x] ADR template + first two ADRs
 - [x] Public repository, docs CI, license, changelog
 
-## Phase 2 — Capability & Component Freeze (v0.1 → v0.3)
+## Phase 2 - Capability & Component Freeze (v0.1 → v0.3)
 
 **Goal:** freeze the vocabulary and inventory before scaling out diagrams, so every future artefact is derived, not invented.
 
-- [x] Specification 011 — Capability Model (C0–C15 + subcapabilities + 5-level maturity)
-- [x] Specification 012 — Component Catalogue (~60 components with ID scheme K-L*-*)
+- [x] Specification 011 - Capability Model (C0–C15 + subcapabilities + 5-level maturity)
+- [x] Specification 012 - Component Catalogue (~60 components with ID scheme K-L*-*)
 - [x] Five-architecture scaffold (`architectures/logical|runtime|deployment|operational|security/`)
 - [x] Diagram Catalogue (`diagrams/CATALOGUE.md`) — 25-diagram inventory with IDs D-L1..S5
 - [x] Master Runtime Execution Flow diagram (D-R1)
 - [ ] Public discussion opened on GitHub Discussions
 - [ ] First external reviewers onboarded
-- [ ] Specification 013 — Conformance Test Suite (planned)
-- [ ] Specification 014 — Standards Mapping (NIST AI RMF, ISO 42001, EU AI Act, OWASP LLM, MITRE ATLAS) (planned)
+- [ ] Specification 013 - Conformance Test Suite (planned)
+- [ ] Specification 014 - Standards Mapping (NIST AI RMF, ISO 42001, EU AI Act, OWASP LLM, MITRE ATLAS) (planned)
 
-## Phase 3 — Complete the Five-Architecture Diagram Set (v0.3 → v0.7)
+## Phase 3 - Complete the Five-Architecture Diagram Set (v0.3 → v0.7)
 
 **Goal:** ship the remaining ~20 diagrams that turn each of the five architecture views into a reviewable, publication-quality set. Each diagram references only components in [Spec 012](./specification/012-component-catalogue.md).
 
@@ -83,7 +83,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [ ] D-S4 Data Classification & Residency Flow
 - [ ] D-S5 High-Impact Action Gate & Audit Trail
 
-## Phase 4 — Handbook (v0.7 → v0.9)
+## Phase 4 - Handbook (v0.7 → v0.9)
 
 **Goal:** deep-dive per-layer chapters that turn the specification into an engineering handbook.
 
@@ -107,7 +107,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [ ] Cross-cutting handbook: Multi-Region & DR
 - [ ] Cross-cutting handbook: Responsible AI
 
-## Phase 5 — Cloud & Implementation Mappings (v0.9 → v1.0-RC)
+## Phase 5 - Cloud & Implementation Mappings (v0.9 → v1.0-RC)
 
 **Goal:** demonstrate that the vendor-neutral architecture maps cleanly to real stacks.
 
@@ -119,7 +119,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [ ] Minimum viable reference implementation (single-agent RAG, spec-compliant)
 - [ ] Per-implementation Capability Maturity Statements
 
-## Phase 6 — v1.0 Release
+## Phase 6 - v1.0 Release
 
 **Goal:** freeze the architecture and declare it production-ready as a reference.
 
@@ -130,7 +130,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [ ] Website / docs site launched
 - [ ] v1.0 tagged; deprecation policy in force
 
-## Phase 7 — Ecosystem (v1.x)
+## Phase 7 - Ecosystem (v1.x)
 
 **Goal:** grow adoption and the surrounding ecosystem.
 
@@ -224,10 +224,10 @@ self-certify (v0.x / v1.0) and later be certified via the badge programme (v1.x)
 
 | Level | Requires (cumulative) |
 |---|---|
-| **Bronze** — *Baseline architecture* | All 16 layers present · L1 Edge/Gateway/Identity · L13 Security & Zero Trust · L8 Guardrails |
-| **Silver** — *Verifiable & observable* | Bronze + L9 Verification pipeline (grounding, citation, safety, confidence) + L10 Observability plane (traces, metrics, cost, evals) |
-| **Gold** — *Benchmarked & documented* | Silver + published benchmark results (latency · cost · safety · verification) + ADRs for every major architectural choice + failure-mode documentation per layer |
-| **Platinum** — *Multi-cloud & certified* | Gold + at least two independent cloud deployments proven equivalent + external audit against the EASRA Conformance Test Suite + published Capability Maturity Statement |
+| **Bronze** - *Baseline architecture* | All 16 layers present · L1 Edge/Gateway/Identity · L13 Security & Zero Trust · L8 Guardrails |
+| **Silver** - *Verifiable & observable* | Bronze + L9 Verification pipeline (grounding, citation, safety, confidence) + L10 Observability plane (traces, metrics, cost, evals) |
+| **Gold** - *Benchmarked & documented* | Silver + published benchmark results (latency · cost · safety · verification) + ADRs for every major architectural choice + failure-mode documentation per layer |
+| **Platinum** - *Multi-cloud & certified* | Gold + at least two independent cloud deployments proven equivalent + external audit against the EASRA Conformance Test Suite + published Capability Maturity Statement |
 
 Each level is measured against the [Component Catalogue](./specification/012-component-catalogue.md)
 and the [Capability Model](./specification/011-capability-model.md). Details live in Spec 013.
