@@ -1119,8 +1119,9 @@ def build_architecture_v2(prs: Presentation):
     add_box(slide, router_x, row2_top, router_w, row2_h, fill, border,
             "L2 Router · Planner · Agent Selector · Session Context",
             font_size=11, text_color=tcol, title_size=11, bold_title=True)
-    # arrow AI Gateway → Router (vertical)
-    x_ag = left_pad + (bw1 + gap1) * 4 + bw1 / 2
+    # arrow AI Gateway → Router (vertical) — offset to the RIGHT side of the AI
+    # Gateway column so the caption "Routing · retries" doesn't hide the shaft.
+    x_ag = left_pad + (bw1 + gap1) * 4 + bw1 * 0.72
     _arrow_shape(slide, x_ag - Inches(0.11), row1_top + row1_h + Inches(0.02),
                  Inches(0.22), Inches(0.32), "down", "#3B7DDD")
 
@@ -1222,10 +1223,17 @@ def build_architecture_v2(prs: Presentation):
                 title=t, title_size=11, font_size=9.5,
                 title_color=tcol, text_color=tcol, align_left=True)
 
-    # dashed connector: core → event bus
+    # dashed L-shape: core (top of row 3) → UP the gutter → into Event Bus.
+    # Terminates at the Event Bus card (top of sidebar), not the Retry Queue.
+    bend_x = left_pad + main_w + Inches(0.20)
+    eb_y   = sb_top + Inches(0.25)  # vertical center of Event Bus card
     _connector(slide, MSO_CONNECTOR.STRAIGHT,
-               left_pad + main_w, row3_top + row3_h / 2,
-               sidebar_left, row3_top + row3_h / 2,
+               bend_x, row3_top,
+               bend_x, eb_y,
+               color="#B58900", weight=1.5, dashed=True)
+    _connector(slide, MSO_CONNECTOR.STRAIGHT,
+               bend_x, eb_y,
+               sidebar_left, eb_y,
                color="#B58900", weight=1.5, dashed=True)
 
     # -------- Bottom strip: cross-cutting planes -------- #
