@@ -1392,26 +1392,34 @@ def build_verification_pipeline(prs: Presentation):
         x = left_pad + (bw + gap) * col
         y = top1 + (row_h + row_gap) * row
         fill, border, tcol = PALETTE["security"]
-        # numbered chip on top-left (wider for two-digit numbers)
+
+        # draw card FIRST so chip can render on top
+        add_box(slide, x, y, bw, row_h, fill, border, body,
+                title=name, title_size=13, font_size=10.5,
+                title_color=tcol, text_color=tcol, align_left=True)
+
+        # numbered chip on top-left, drawn on top of the card
         two_digit = (i + 1) >= 10
-        chip_w = Inches(0.6 if two_digit else 0.42)
-        chip_h = Inches(0.42)
+        chip_w = Inches(0.78 if two_digit else 0.60)
+        chip_h = Inches(0.60)
         chip = slide.shapes.add_shape(
-            MSO_SHAPE.OVAL, int(x + Inches(0.08)), int(y - chip_h / 2),
+            MSO_SHAPE.OVAL,
+            int(x + Inches(0.12)),
+            int(y - chip_h + Inches(0.18)),
             chip_w, chip_h,
         )
         chip.fill.solid()
         chip.fill.fore_color.rgb = hex_to_rgb("#C0392B")
-        chip.line.color.rgb = hex_to_rgb("#C0392B")
-        ctf = chip.text_frame; ctf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        chip.line.color.rgb = hex_to_rgb("#FFFFFF")
+        chip.line.width = Pt(2)
+        ctf = chip.text_frame
+        ctf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        ctf.margin_left = Emu(0); ctf.margin_right = Emu(0)
+        ctf.margin_top = Emu(0); ctf.margin_bottom = Emu(0)
         cp = ctf.paragraphs[0]; cp.alignment = PP_ALIGN.CENTER
         cr = cp.add_run(); cr.text = str(i + 1)
-        cr.font.size = Pt(12); cr.font.bold = True
+        cr.font.size = Pt(18); cr.font.bold = True
         cr.font.color.rgb = hex_to_rgb("#FFFFFF"); cr.font.name = "Segoe UI"
-
-        add_box(slide, x, y, bw, row_h, fill, border, body,
-                title=name, title_size=13, font_size=10.5,
-                title_color=tcol, text_color=tcol, align_left=True)
 
         # right arrow to next in the same row
         if col < cols - 1:
