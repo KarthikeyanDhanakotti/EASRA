@@ -111,12 +111,13 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 
 **Goal:** demonstrate that the vendor-neutral architecture maps cleanly to real stacks.
 
-- [ ] Azure implementation guide (per layer)
-- [ ] AWS implementation guide (per layer)
-- [ ] GCP implementation guide (per layer)
-- [ ] Open-source implementation guide (per layer)
-- [ ] Kubernetes deployment topology
+- [x] Azure implementation guide (per layer)
+- [x] AWS implementation guide (per layer)
+- [x] GCP implementation guide (per layer)
+- [x] Open-source implementation guide (per layer)
+- [ ] Terraform / Bicep / CDK / Helm scaffolding
 - [ ] Minimum viable reference implementation (single-agent RAG, spec-compliant)
+- [ ] Per-implementation Capability Maturity Statements
 
 ## Phase 6 — v1.0 Release
 
@@ -133,13 +134,35 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 
 **Goal:** grow adoption and the surrounding ecosystem.
 
+- [x] Standard deliverable scaffold: benchmarks / security-reference / verification-reference / llmops-guide / conference
+- [ ] Benchmarks first result set published (B-LAT, B-COST, B-SAFE, B-VER)
+- [ ] Security-reference threat models for W-SARAG / W-MAC / W-TOOL
+- [ ] Verification-reference reference checker implementations
+- [ ] LLMOps-guide AI-specific runbook set
+- [ ] Conference materials: keynote (30 min), deep-dive (60 min), workshop (half-day)
 - [ ] Multi-agent worked example
 - [ ] Tool-use (MCP) worked example
 - [ ] Cost-aware routing worked example
 - [ ] Agent Optimizer worked example
-- [ ] Conference tutorials and workshops
 - [ ] Certification / conformance badge programme (via TSC)
 - [ ] Case studies from external adopters
+
+## Standard Deliverables (cross-phase)
+
+EASRA is structured as an open standard with ten deliverables. Each has its own maturity trajectory that cuts across the phases above.
+
+| # | Deliverable | v0.1 | v0.5 | v1.0 |
+|---|-------------|------|------|------|
+| 1 | Architecture Specification | ✅ 12 specs (draft) | Spec 013 conformance + 014 standards mapping | Frozen |
+| 2 | Handbook | Scaffolded | All 16 layers written | Reviewed |
+| 3 | Reference Architectures | 5 views scaffolded, 5 diagrams done | 25 diagrams complete | Reviewed |
+| 4 | Cloud Implementations | 4 mapping guides draft | + IaC scaffolds | Per-cloud reference impl |
+| 5 | Benchmarks | Categories + workloads defined | First result set | Adopter results published |
+| 6 | ADRs | Active | Complete for v1.0 decisions | Frozen for v1.0 |
+| 7 | Security Reference | Threats + controls catalogue draft | Threat models + red-team playbook | Standards mapping complete |
+| 8 | Verification Reference | Classes + checker catalogue draft | Reference checkers implemented | Golden sets published |
+| 9 | LLMOps Guide | Draft | AI-specific runbooks complete | Reviewed |
+| 10 | Conference Materials | Slot list | Keynote + deep-dive + workshop | Delivered at ≥ 3 events |
 
 ## Phase 8 — Research (parallel to all phases)
 

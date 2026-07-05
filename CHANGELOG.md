@@ -5,6 +5,12 @@ All notable changes to EASRA are recorded here. The format is based on [Keep a C
 ## [Unreleased]
 
 ### Added
+- `implementations/` — vendor mapping guides for Azure, AWS, GCP, and open-source (Kubernetes + CNCF), each with per-layer + trust-boundary + NFR mapping and known-gap sections.
+- `benchmarks/` — benchmark categories (latency, throughput, cost, safety, verification, reliability, cache, continuous eval), reference workloads (W-SARAG / W-MAC / W-TOOL / W-STREAM / W-INJ / W-COST), and benchmark-spec skeleton.
+- `security-reference/` — threat catalogue (OWASP LLM Top 10 + MITRE ATLAS mapped to EASRA layers), controls catalogue, standards-mapping status, threat-model roster, red-team + incident-response outlines.
+- `verification-reference/` — verification-vs-evaluation contract, seven verification classes with checker catalogue, grounding metric definitions, golden-set methodology, continuous verification loop, anti-patterns.
+- `llmops-guide/` — reference delivery pipeline, prompt/model/tool lifecycles, evaluation strategy table, cost engineering, observability conventions, reference SLOs, AI-specific runbook roster.
+- `conference/` — talk deck / workshop / abstract slot list, suggested outlines for keynote / deep-dive / enterprise brief / half-day workshop, citation guidance.
 - Specification 011 — Capability Model (16 capability domains C0–C15, ~70 subcapabilities, 5-level maturity model, freezing rule).
 - Specification 012 — Component Catalogue (~60 components across L0–L15 plus cross-cutting substrate, with `K-L*-*` ID scheme and status legend).
 - `architectures/` folder with the five-view scaffold: `logical/`, `runtime/`, `deployment/`, `operational/`, `security/` (each with a README naming its diagrams and anchoring specs).
@@ -12,9 +18,9 @@ All notable changes to EASRA are recorded here. The format is based on [Keep a C
 - Diagram D-R1 — Master Runtime Execution Flow (`diagrams/runtime-execution-flow.md`), showing decision points, cache lookups, guardrails, model fallback, tool impact-class gating, verification verdicts, and streaming.
 
 ### Changed
+- `README.md` — repositioned EASRA as an **open architecture standard** with 10 explicit deliverables; adds Standard Deliverables table with status; refreshed nav bar and repo structure.
 - `specification/README.md` — reading-order table extended to specs 011 and 012.
-- `README.md` — adds "Five Architecture Views" section; references capability model, component catalogue, and diagram catalogue; updates repo structure block; reflects 12 numbered specs (was 10).
-- `ROADMAP.md` — restructured to reviewer-recommended process: Phase 1 Draft Spec (done), Phase 2 Capability & Component Freeze (mostly done), Phase 3 Complete 5-Architecture Diagram Set (~25 diagrams), Phase 4 Handbook, Phase 5 Cloud mappings, Phase 6 v1.0, Phase 7 Ecosystem, Phase 8 Research.
+- `ROADMAP.md` — restructured to the reviewer-recommended process: Phase 1 Draft Spec, Phase 2 Capability & Component Freeze, Phase 3 Complete 5-Architecture Diagram Set, Phase 4 Handbook, Phase 5 Cloud mappings (partially done), Phase 6 v1.0, Phase 7 Ecosystem, Phase 8 Research. Added cross-phase Standard Deliverables table.
 
 ## [0.1.0] — 2026-07-05
 

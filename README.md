@@ -3,11 +3,13 @@
 # EASRA
 ### Enterprise AI Systems Reference Architecture
 
-**A vendor-neutral reference architecture for designing, building, operating, governing, securing, observing, and verifying production-grade Enterprise AI and Agentic AI systems.**
+**An open architecture standard for designing, building, operating, governing, securing, observing, and verifying production-grade Enterprise AI and Agentic AI systems.**
+
+*Vendor-neutral · Standards-aligned · Community-governed*
 
 *Version 0.1 (Draft) — 2026*
 
-[Specification](./specification/) · [Handbook](./handbook/) · [Diagrams](./diagrams/) · [Examples](./examples/) · [Reference Implementation](./reference-implementation/) · [ADRs](./adr/) · [Research](./research/)
+[Specification](./specification/) · [Architectures](./architectures/) · [Handbook](./handbook/) · [Implementations](./implementations/) · [Benchmarks](./benchmarks/) · [Security](./security-reference/) · [Verification](./verification-reference/) · [LLMOps](./llmops-guide/) · [ADRs](./adr/) · [Diagrams](./diagrams/CATALOGUE.md)
 
 </div>
 
@@ -39,6 +41,25 @@ There is no widely adopted, vendor-neutral reference architecture for that reali
 - Not tied to any LLM vendor, cloud provider, agent framework, or programming language.
 - Not a replacement for TOGAF, NIST AI RMF, OWASP LLM Top 10, MITRE ATLAS, or OpenTelemetry — EASRA *complements* and *references* them.
 - Not a governance policy — EASRA gives the architectural surface on which policies operate.
+
+## Deliverables of the Standard
+
+EASRA is structured like an open architecture standard, not a repository of examples. It is intended to become the central place where architects, engineers, security teams, and researchers come to learn, contribute, and build Enterprise AI systems. It ships as ten distinct deliverables:
+
+| # | Deliverable | What it is | Status | Location |
+|---|-------------|------------|--------|----------|
+| 1 | 📘 **Architecture Specification** | The 12 numbered normative specs (principles, layers, interfaces, capabilities, components, NFRs, trust boundaries). | Draft (v0.1) | [`specification/`](./specification/) |
+| 2 | 📖 **Handbook** | Per-layer engineering deep-dives (components, patterns, anti-patterns, failure modes, cloud mappings, checklists). | Scaffolded | [`handbook/`](./handbook/) |
+| 3 | 🏗 **Reference Architectures** | Five architecture views (Logical, Runtime, Deployment, Operational, Security) with ~25 catalogued diagrams. | Scaffolded | [`architectures/`](./architectures/) + [`diagrams/CATALOGUE.md`](./diagrams/CATALOGUE.md) |
+| 4 | ☁ **Cloud Implementations** | Concrete Azure / AWS / GCP / open-source mappings of every layer, component, and NFR. | Draft | [`implementations/`](./implementations/) |
+| 5 | 🧪 **Benchmarks** | Reproducible latency, cost, safety, verification, cache, and reliability measurements against standard workloads. | Scaffolded | [`benchmarks/`](./benchmarks/) |
+| 6 | 📊 **Architecture Decision Records** | Every structural decision recorded, reviewable, and reversible. | Active | [`adr/`](./adr/) |
+| 7 | 🛡 **Security Reference** | Threat catalogue (OWASP LLM, MITRE ATLAS), controls catalogue, standards mappings, threat models, red-team playbook. | Draft | [`security-reference/`](./security-reference/) |
+| 8 | 🔍 **AI Verification Reference** | The seven verification classes, reference checkers, grounding metrics, golden-set methodology, continuous verification. | Draft | [`verification-reference/`](./verification-reference/) |
+| 9 | 📈 **LLMOps Guide** | Delivery pipeline, prompt / model / tool lifecycles, evaluation strategy, cost engineering, incident response. | Draft | [`llmops-guide/`](./llmops-guide/) |
+| 10 | 🎓 **Conference & Community Materials** | Talk decks, workshops, abstracts — reusable under CC-BY-4.0. | Planned | [`conference/`](./conference/) |
+
+Roadmap for each deliverable is tracked in [ROADMAP.md](./ROADMAP.md).
 
 ## Core Design Principles
 
@@ -102,10 +123,16 @@ EASRA/
 ├── architectures/            Five architecture views (logical, runtime, deployment, operational, security)
 ├── handbook/                 Per-layer chapters and cross-cutting guides
 ├── diagrams/                 Publication-grade Mermaid + drawio diagrams (see CATALOGUE.md)
+├── implementations/          Azure / AWS / GCP / open-source realisations
+├── benchmarks/               Reproducible latency, cost, safety, verification measurements
+├── security-reference/       Threats, controls, standards mappings, threat models, red-team
+├── verification-reference/   Verification classes, checkers, metrics, golden-set methodology
+├── llmops-guide/             Delivery, lifecycle, evaluation strategy, cost, incident response
 ├── examples/                 Worked example architectures (single-agent, multi-agent, RAG, tool-use)
 ├── reference-implementation/ Minimal spec-compliant open-source implementation
 ├── adr/                      Architecture Decision Records
 ├── research/                 Forward-looking work (compilers, verification, benchmarks)
+├── conference/               Talk decks, workshops, tutorials
 ├── CONTRIBUTING.md
 ├── GOVERNANCE.md
 ├── ROADMAP.md
