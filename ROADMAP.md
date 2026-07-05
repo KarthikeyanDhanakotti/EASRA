@@ -214,7 +214,23 @@ This section shows where each one lives in the plan so contributors can pick the
 | Failure modes per layer (scenario · detection · mitigation · recovery · fallback) | New template `templates/failure-modes.md` referenced from every handbook chapter | Phase 4 |
 | Performance budgets per layer (targets, not guarantees) | Extension of Spec 010 NFR into per-layer budget table; enforced in handbook | Phase 4 |
 | Interface contracts per layer (inputs · outputs · state · deps · failure · latency · security · observability) | Spec 006 Interface Specification (already drafted) — will be expanded with a per-layer contract stub in every handbook chapter | Phase 4 |
-| Conformance profiles (Baseline · Regulated · Safety-critical) | Spec 013 Conformance Test Suite + Phase 6 conformance badge programme | Phase 2 → Phase 7 |
+| Conformance profiles (Bronze · Silver · Gold · Platinum) | Spec 013 Conformance Test Suite + Phase 6 conformance badge programme (see below) | Phase 2 → Phase 7 |
+
+## Conformance levels
+
+To help adopters signal maturity without overloading a single "compliant / not compliant" flag,
+EASRA defines four conformance levels. Reference implementations, adopters and vendors can
+self-certify (v0.x / v1.0) and later be certified via the badge programme (v1.x).
+
+| Level | Requires (cumulative) |
+|---|---|
+| **Bronze** — *Baseline architecture* | All 16 layers present · L1 Edge/Gateway/Identity · L13 Security & Zero Trust · L8 Guardrails |
+| **Silver** — *Verifiable & observable* | Bronze + L9 Verification pipeline (grounding, citation, safety, confidence) + L10 Observability plane (traces, metrics, cost, evals) |
+| **Gold** — *Benchmarked & documented* | Silver + published benchmark results (latency · cost · safety · verification) + ADRs for every major architectural choice + failure-mode documentation per layer |
+| **Platinum** — *Multi-cloud & certified* | Gold + at least two independent cloud deployments proven equivalent + external audit against the EASRA Conformance Test Suite + published Capability Maturity Statement |
+
+Each level is measured against the [Component Catalogue](./specification/012-component-catalogue.md)
+and the [Capability Model](./specification/011-capability-model.md). Details live in Spec 013.
 
 ## How to influence the roadmap
 

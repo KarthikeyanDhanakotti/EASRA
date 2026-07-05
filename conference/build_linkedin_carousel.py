@@ -135,7 +135,7 @@ def build_what_is(prs: Presentation):
 
     add_text(
         slide, Inches(0.6), Inches(1.0), W - Inches(1.2), Inches(1.0),
-        "An open architecture standard for Enterprise AI.",
+        "An open reference architecture for Enterprise AI.",
         size=36, bold=True, color="#0B1F3A", align=PP_ALIGN.LEFT,
     )
     add_text(
@@ -411,11 +411,11 @@ def build_runtime_flow(prs: Presentation):
 
 def build_llmops(prs: Presentation):
     slide, W, H = slide_bg(prs)
-    title_bar(slide, W, subtitle_right="L12 · LLMOps & Delivery")
+    title_bar(slide, W, subtitle_right="L12 · AI Platform Engineering")
 
     add_text(
         slide, Inches(0.35), Inches(0.85), W - Inches(0.7), Inches(0.45),
-        "Traditional CI/CD is not enough. LLMOps adds prompt tests, eval gates, model registry, canary + shadow, cost guardrails.",
+        "Traditional CI/CD is not enough. AI Platform Engineering adds prompt tests, eval gates, model registry, canary + shadow, cost guardrails.",
         size=12, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
     )
 
@@ -656,7 +656,7 @@ def build_standards(prs: Presentation):
         ("NIST AI RMF",  "Govern · Map · Measure · Manage",
          "L14 Governance · L10 Observability", "neutral"),
         ("ISO / IEC 42001", "AI management system",
-         "L14 · L12 LLMOps · L15 Value", "neutral"),
+         "L14 · L12 AI Platform · L15 Value", "neutral"),
         ("EU AI Act",   "Risk categorisation + provider duties",
          "L14 · L9 Verification · L13 Security", "security"),
         ("OWASP LLM Top 10", "LLM-specific application risks",
@@ -917,7 +917,7 @@ def build_hero_v2(prs: Presentation):
 
     add_text(
         slide, Inches(0.9), Inches(0.85), Inches(11.5), Inches(0.4),
-        "OPEN ARCHITECTURE STANDARD  ·  v0.1.0",
+        "OPEN REFERENCE ARCHITECTURE  ·  v0.1.0",
         size=13, bold=True, color="#3B7DDD", align=PP_ALIGN.LEFT,
     )
     add_text(
@@ -931,7 +931,7 @@ def build_hero_v2(prs: Presentation):
     )
     add_text(
         slide, Inches(0.9), Inches(3.85), Inches(11.5), Inches(0.65),
-        "The open standard for production-grade Enterprise AI.",
+        "The open reference architecture for production-grade Enterprise AI.",
         size=20, italic=True, color="#B8CDEA", align=PP_ALIGN.LEFT,
     )
 
@@ -1670,7 +1670,7 @@ def build_three_planes(prs: Presentation):
              "Alerting & on-call",
              "Governance & audit logs",
              "Compliance evidence",
-             "LLMOps eval & benchmarks",
+             "AI Platform eval & benchmarks",
              "Incident response",
              "Capacity + quota planning",
          ]),
@@ -1728,7 +1728,7 @@ def build_adrs(prs: Presentation):
     add_text(
         slide, Inches(0.35), Inches(0.85), W - Inches(0.7), Inches(0.55),
         "Every consequential architectural choice in EASRA is recorded as an ADR. "
-        "Not a deliverable — a first-class artefact of the standard.",
+        "Not a deliverable — a first-class artefact of the framework.",
         size=13, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
     )
 

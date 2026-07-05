@@ -3,7 +3,7 @@
 # EASRA
 ### Enterprise AI Systems Reference Architecture
 
-**An open architecture standard for designing, building, operating, governing, securing, observing, and verifying production-grade Enterprise AI and Agentic AI systems.**
+**An open reference architecture for designing, building, operating, governing, securing, observing, and verifying production-grade Enterprise AI and Agentic AI systems.**
 
 *Vendor-neutral · Standards-aligned · Community-governed*
 
