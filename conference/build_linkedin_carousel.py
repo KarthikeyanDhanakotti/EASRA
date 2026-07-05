@@ -865,6 +865,719 @@ def build_cta(prs: Presentation):
     )
 
 
+# ---------- v2 builders (post-review) ---------- #
+
+def _connector(slide, kind, x1, y1, x2, y2, color="#5A6470", weight=1.75,
+               dashed=False):
+    """Add a connector line. `kind` is one of MSO_CONNECTOR members."""
+    line = slide.shapes.add_connector(kind, int(x1), int(y1), int(x2), int(y2))
+    line.line.color.rgb = hex_to_rgb(color)
+    line.line.width = Pt(weight)
+    if dashed:
+        try:
+            from pptx.enum.dml import MSO_LINE_DASH_STYLE
+            line.line.dash_style = MSO_LINE_DASH_STYLE.DASH
+        except Exception:
+            pass
+    return line
+
+
+def _arrow_shape(slide, x, y, w, h, direction="right", color="#3B7DDD"):
+    """Draw a solid arrow shape (visible arrowhead)."""
+    mapping = {
+        "right": MSO_SHAPE.RIGHT_ARROW,
+        "down":  MSO_SHAPE.DOWN_ARROW,
+        "left":  MSO_SHAPE.LEFT_ARROW,
+        "up":    MSO_SHAPE.UP_ARROW,
+    }
+    a = slide.shapes.add_shape(mapping[direction], int(x), int(y), int(w), int(h))
+    a.fill.solid()
+    a.fill.fore_color.rgb = hex_to_rgb(color)
+    a.line.color.rgb = hex_to_rgb(color)
+    a.line.width = Pt(0.25)
+    a.text_frame.text = ""
+    return a
+
+
+def build_hero_v2(prs: Presentation):
+    """Cover slide — benefit pillars replacing internal-stat badges."""
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    W, H = prs.slide_width, prs.slide_height
+
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, W, H)
+    bg.fill.solid()
+    bg.fill.fore_color.rgb = hex_to_rgb(PALETTE["hero_bg"][0])
+    bg.line.fill.background()
+
+    bar = slide.shapes.add_shape(
+        MSO_SHAPE.RECTANGLE, 0, Inches(6.55), W, Inches(0.15))
+    bar.fill.solid()
+    bar.fill.fore_color.rgb = hex_to_rgb(PALETTE["hero_acc"][0])
+    bar.line.fill.background()
+
+    add_text(
+        slide, Inches(0.9), Inches(0.85), Inches(11.5), Inches(0.4),
+        "OPEN ARCHITECTURE STANDARD  ·  v0.1.0",
+        size=13, bold=True, color="#3B7DDD", align=PP_ALIGN.LEFT,
+    )
+    add_text(
+        slide, Inches(0.9), Inches(1.25), Inches(11.5), Inches(1.7),
+        "EASRA", size=88, bold=True, color="#FFFFFF", align=PP_ALIGN.LEFT,
+    )
+    add_text(
+        slide, Inches(0.9), Inches(2.85), Inches(11.5), Inches(0.9),
+        "Enterprise AI Systems Reference Architecture",
+        size=32, bold=False, color="#FFFFFF", align=PP_ALIGN.LEFT,
+    )
+    add_text(
+        slide, Inches(0.9), Inches(3.85), Inches(11.5), Inches(0.65),
+        "The open standard for production-grade Enterprise AI.",
+        size=20, italic=True, color="#B8CDEA", align=PP_ALIGN.LEFT,
+    )
+
+    pillars = [
+        ("VENDOR-NEUTRAL",     "No lock-in. Every layer maps to ≥ 2 clouds."),
+        ("PRODUCTION-READY",   "Runtime, deployment & scaling — not a slideware framework."),
+        ("VERIFICATION-FIRST", "Grounding, citation, factuality baked in — verification ≠ evaluation."),
+        ("CLOUD-AGNOSTIC",     "Azure · AWS · GCP · OSS-K8s — same architecture, four impls."),
+    ]
+    x = Inches(0.9)
+    y = Inches(4.85)
+    bw = Inches(2.75)
+    bh = Inches(1.55)
+    gap = Inches(0.15)
+    for label, sub in pillars:
+        shp = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, x, y, bw, bh)
+        shp.fill.solid()
+        shp.fill.fore_color.rgb = hex_to_rgb("#12335F")
+        shp.line.color.rgb = hex_to_rgb("#3B7DDD")
+        shp.line.width = Pt(1.5)
+        tf = shp.text_frame
+        tf.margin_left = Inches(0.15); tf.margin_right = Inches(0.15)
+        tf.margin_top = Inches(0.15); tf.margin_bottom = Inches(0.12)
+        tf.vertical_anchor = MSO_ANCHOR.TOP
+        tf.word_wrap = True
+        p1 = tf.paragraphs[0]; p1.alignment = PP_ALIGN.LEFT
+        r1 = p1.add_run(); r1.text = label
+        r1.font.size = Pt(15); r1.font.bold = True
+        r1.font.color.rgb = hex_to_rgb("#3B7DDD"); r1.font.name = "Segoe UI"
+        p2 = tf.add_paragraph(); p2.alignment = PP_ALIGN.LEFT
+        r2 = p2.add_run(); r2.text = sub
+        r2.font.size = Pt(11); r2.font.color.rgb = hex_to_rgb("#E4EEFB")
+        r2.font.name = "Segoe UI"
+        x += bw + gap
+
+    add_text(
+        slide, Inches(0.9), Inches(6.85), Inches(11.5), Inches(0.35),
+        "Karthikeyan Dhanakotti  ·  github.com/KarthikeyanDhanakotti/EASRA  "
+        "·  CC-BY-4.0 (docs) + Apache-2.0 (code)",
+        size=11, color="#8FA9CE", align=PP_ALIGN.LEFT,
+    )
+
+
+def build_capability_ladder(prs: Presentation):
+    """EASRA as a TOGAF/OpenTelemetry-style progression."""
+    slide, W, H = slide_bg(prs)
+    title_bar(slide, W, subtitle_right="The EASRA capability ladder")
+
+    add_text(
+        slide, Inches(0.35), Inches(0.85), W - Inches(0.7), Inches(0.55),
+        "EASRA is not just a diagram. It is a full stack — like TOGAF, like OpenTelemetry.",
+        size=14, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
+    )
+
+    steps = [
+        ("Capability Model",         "What capabilities every Enterprise AI system must have.", "entry"),
+        ("Reference Arch.",          "16 layers, 4 trust boundaries, 3 planes — the shared shape.", "neutral"),
+        ("Reference Impls.",         "Azure · AWS · GCP · OSS-K8s — same architecture, four impls.", "model"),
+        ("Patterns",                 "Named, reusable solutions: RAG, agent, tool-use, HITL, cache-first.", "data"),
+        ("Verification",             "Grounding · citation · factuality · policy — separated from evaluation.", "obs"),
+        ("Benchmarks",               "Latency · cost · safety · reliability — comparable across impls.", "cache"),
+        ("Certification",            "Conformance profiles: what it means to be ‘EASRA-compliant’.", "security"),
+    ]
+
+    top = Inches(1.95)
+    n = len(steps)
+    gap = Inches(0.12)
+    total_w = W - Inches(0.7)
+    box_w = (total_w - gap * (n - 1)) / n
+    box_h = Inches(4.4)
+
+    for i, (name, body, kind) in enumerate(steps):
+        x = Inches(0.35) + (box_w + gap) * i
+        y = top
+        fill, border, tcol = PALETTE[kind]
+
+        # numbered chip sitting above the card (well clear of the title bar)
+        chip_w = Inches(0.5); chip_h = Inches(0.5)
+        chip = slide.shapes.add_shape(
+            MSO_SHAPE.OVAL,
+            int(x + box_w / 2 - chip_w / 2), int(y - chip_h / 2),
+            chip_w, chip_h,
+        )
+        chip.fill.solid(); chip.fill.fore_color.rgb = hex_to_rgb(border)
+        chip.line.color.rgb = hex_to_rgb(border)
+        ctf = chip.text_frame; ctf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        cp = ctf.paragraphs[0]; cp.alignment = PP_ALIGN.CENTER
+        cr = cp.add_run(); cr.text = str(i + 1)
+        cr.font.size = Pt(13); cr.font.bold = True
+        cr.font.color.rgb = hex_to_rgb("#FFFFFF"); cr.font.name = "Segoe UI"
+
+        # step card
+        add_box(
+            slide, x, y, box_w, box_h,
+            fill, border, body,
+            title=name, title_size=13, font_size=11,
+            title_color=tcol, text_color=tcol, align_left=True,
+        )
+
+        # arrow to next step (horizontal, level with card middle)
+        if i < n - 1:
+            ax1 = x + box_w
+            ay = y + box_h / 2 - Inches(0.14)
+            _arrow_shape(slide, ax1 - Inches(0.02), ay, gap + Inches(0.04),
+                         Inches(0.28), "right", "#3B7DDD")
+
+    add_text(
+        slide, Inches(0.35), H - Inches(0.85), W - Inches(0.7), Inches(0.45),
+        "Ladders 1–3 are v0.1.0 today. Ladders 4–7 are the roadmap.",
+        size=12, italic=True, color="#0B3D91", align=PP_ALIGN.LEFT,
+    )
+    slide_footer(slide, W, H)
+
+
+def build_architecture_v2(prs: Presentation):
+    """Production runtime architecture — U-shaped request/response with
+    parallel core, event bus sidebar, cross-cutting bottom strip."""
+    slide, W, H = slide_bg(prs)
+    title_bar(slide, W, subtitle_right="Production runtime architecture")
+
+    add_text(
+        slide, Inches(0.35), Inches(0.78), W - Inches(0.7), Inches(0.42),
+        "Request flows down through the pipeline; response streams back through verification and guardrails. "
+        "Async work fans out to an event bus.",
+        size=11, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
+    )
+
+    # main working area
+    left_pad = Inches(0.35)
+    top_area = Inches(1.28)
+    sidebar_w = Inches(2.6)
+    main_w = W - left_pad - sidebar_w - Inches(0.4) - Inches(0.35)  # gap + margin
+    sidebar_left = left_pad + main_w + Inches(0.4)
+
+    # -------- Row 1: Ingress path (top strip) -------- #
+    row1_top = top_area
+    row1_h = Inches(0.55)
+    ingress = [
+        ("User",         "entry"),
+        ("CDN / Edge",   "entry"),
+        ("WAF · DDoS",   "security"),
+        ("API Gateway",  "entry"),
+        ("AI Gateway",   "model"),
+    ]
+    n1 = len(ingress)
+    gap1 = Inches(0.12)
+    bw1 = (main_w - gap1 * (n1 - 1)) / n1
+    for i, (label, kind) in enumerate(ingress):
+        x = left_pad + (bw1 + gap1) * i
+        fill, border, tcol = PALETTE[kind]
+        add_box(slide, x, row1_top, bw1, row1_h, fill, border, label,
+                font_size=11, text_color=tcol, title_size=11, bold_title=True)
+        if i < n1 - 1:
+            ax = x + bw1
+            ay = row1_top + row1_h / 2 - Inches(0.11)
+            _arrow_shape(slide, ax - Inches(0.02), ay, gap1 + Inches(0.04),
+                         Inches(0.22), "right", "#3B7DDD")
+
+    # -------- Row 2: Router / Planner (centered wide box) -------- #
+    row2_top = row1_top + row1_h + Inches(0.35)
+    row2_h = Inches(0.55)
+    router_w = main_w * 0.7
+    router_x = left_pad + (main_w - router_w) / 2
+    fill, border, tcol = PALETTE["neutral"]
+    add_box(slide, router_x, row2_top, router_w, row2_h, fill, border,
+            "L2 Router · Planner · Agent Selector · Session Context",
+            font_size=11, text_color=tcol, title_size=11, bold_title=True)
+    # arrow AI Gateway → Router (vertical)
+    x_ag = left_pad + (bw1 + gap1) * 4 + bw1 / 2
+    _arrow_shape(slide, x_ag - Inches(0.11), row1_top + row1_h + Inches(0.02),
+                 Inches(0.22), Inches(0.32), "down", "#3B7DDD")
+
+    # -------- Row 3: AI reasoning core (5 parallel columns) -------- #
+    row3_top = row2_top + row2_h + Inches(0.35)
+    row3_h = Inches(2.05)
+    core = [
+        ("L4 Memory",       "Session · long-term\nprofile · episodic",       "data"),
+        ("L5 Retrieval",    "Vector · BM25\nSQL · Graph · rerank",           "data"),
+        ("L3 Prompt Build", "Template · pack\ncontext · budget",             "neutral"),
+        ("L7 Tools · MCP",  "Registry · impact\nclass · guardrails",         "data"),
+        ("L6 Model Router", "Foundation · SLM\ncost · latency · policy",     "model"),
+    ]
+    n3 = len(core)
+    gap3 = Inches(0.12)
+    bw3 = (main_w - gap3 * (n3 - 1)) / n3
+    for i, (t, body, kind) in enumerate(core):
+        x = left_pad + (bw3 + gap3) * i
+        fill, border, tcol = PALETTE[kind]
+        add_box(slide, x, row3_top, bw3, row3_h, fill, border, body,
+                title=t, title_size=11, font_size=10,
+                title_color=tcol, text_color=tcol, align_left=True)
+        # request arrows down from Router
+        rx = router_x + router_w * (i + 0.5) / n3
+        _arrow_shape(slide, rx - Inches(0.09),
+                     row2_top + row2_h + Inches(0.02),
+                     Inches(0.18), Inches(0.28), "down", "#8A94A0")
+        # response arrows back up (dashed teal, offset)
+        _connector(slide, MSO_CONNECTOR.STRAIGHT,
+                   x + bw3 - Inches(0.15), row3_top,
+                   x + bw3 - Inches(0.15), row2_top + row2_h,
+                   color="#16A085", weight=1.25, dashed=True)
+
+    # -------- Row 4: Verification pipeline + Guardrails -------- #
+    row4_top = row3_top + row3_h + Inches(0.3)
+    row4_h = Inches(0.6)
+    verify = [
+        ("L9 Verification",  "security"),
+        ("L8 Guardrails",    "security"),
+        ("Response Format",  "obs"),
+        ("L1 Streaming",     "entry"),
+    ]
+    n4 = len(verify)
+    gap4 = Inches(0.14)
+    bw4 = (main_w - gap4 * (n4 - 1)) / n4
+    for i, (label, kind) in enumerate(verify):
+        x = left_pad + (bw4 + gap4) * i
+        fill, border, tcol = PALETTE[kind]
+        add_box(slide, x, row4_top, bw4, row4_h, fill, border, label,
+                font_size=11, text_color=tcol, title_size=11, bold_title=True)
+        if i < n4 - 1:
+            ax = x + bw4
+            ay = row4_top + row4_h / 2 - Inches(0.11)
+            _arrow_shape(slide, ax - Inches(0.02), ay,
+                         gap4 + Inches(0.04), Inches(0.22),
+                         "right", "#C0392B")
+
+    # arrow from core row down to verification (single central down arrow)
+    cx = left_pad + main_w / 2
+    _arrow_shape(slide, cx - Inches(0.11),
+                 row3_top + row3_h + Inches(0.02),
+                 Inches(0.22), Inches(0.22), "down", "#C0392B")
+
+    # -------- Response back to User (curved-ish left arrow along the bottom) -------- #
+    row5_top = row4_top + row4_h + Inches(0.28)
+    row5_h = Inches(0.42)
+    add_text(
+        slide, left_pad, row5_top, main_w, row5_h,
+        "← Streaming response back to User  ·  same pipeline in reverse  ·  citations · redaction · verdict",
+        size=11, italic=True, color="#0B3D91", align=PP_ALIGN.CENTER,
+    )
+
+    # -------- Right sidebar: Event bus + async workers + DLQ -------- #
+    sb_top = top_area
+    sb_h = row4_top + row4_h - sb_top
+    sb_fill, sb_border, sb_tcol = PALETTE["obs"]
+    add_box(slide, sidebar_left, sb_top, sidebar_w, Inches(0.5),
+            sb_fill, sb_border, "Kafka · Event Hub · Pub/Sub",
+            title="Event Bus", title_size=12, font_size=10,
+            title_color=sb_tcol, text_color=sb_tcol, align_left=True)
+
+    sb_items = [
+        ("Async Workers",  "Long-running · batch\nembedding · re-index"),
+        ("DLQ",            "Dead-letter queue\npoison messages"),
+        ("Retry Queue",    "Exponential backoff\nidempotent handlers"),
+        ("Outbox / Saga",  "Reliable side-effects\nexactly-once semantics"),
+    ]
+    item_h = Inches(0.88)
+    item_gap = Inches(0.1)
+    it_top = sb_top + Inches(0.5) + Inches(0.15)
+    for i, (t, body) in enumerate(sb_items):
+        y = it_top + (item_h + item_gap) * i
+        fill, border, tcol = PALETTE["cache"]
+        add_box(slide, sidebar_left, y, sidebar_w, item_h,
+                fill, border, body,
+                title=t, title_size=11, font_size=9.5,
+                title_color=tcol, text_color=tcol, align_left=True)
+
+    # dashed connector: core → event bus
+    _connector(slide, MSO_CONNECTOR.STRAIGHT,
+               left_pad + main_w, row3_top + row3_h / 2,
+               sidebar_left, row3_top + row3_h / 2,
+               color="#B58900", weight=1.5, dashed=True)
+
+    # -------- Bottom strip: cross-cutting planes -------- #
+    strip_top = H - Inches(0.85)
+    strip_h = Inches(0.48)
+    strip_w = W - Inches(0.7)
+    planes = [
+        ("L10  Observability Plane",  "OpenTelemetry · traces · metrics · logs · token/cost accounting"),
+        ("L13  Security Plane",       "Zero trust · IAM · secrets · encryption · threat detection · policy"),
+        ("L15  Cost & Value Plane",   "Token budgets · autoscaling · GPU scheduling · load shedding · backpressure"),
+    ]
+    n_p = len(planes)
+    gap_p = Inches(0.12)
+    bwp = (strip_w - gap_p * (n_p - 1)) / n_p
+    for i, (t, body) in enumerate(planes):
+        x = Inches(0.35) + (bwp + gap_p) * i
+        fill, border, tcol = PALETTE["obs"]
+        add_box(slide, x, strip_top, bwp, strip_h, fill, border, body,
+                title=t, title_size=10.5, font_size=9,
+                title_color=tcol, text_color=tcol, align_left=True)
+
+    slide_footer(slide, W, H,
+                 text="Solid arrows = request path  ·  Dashed teal = response  "
+                      "·  Dashed amber = async / eventing  ·  Bottom strip = cross-cutting planes")
+
+
+def build_runtime_sequence(prs: Presentation):
+    """Runtime execution as a sequence diagram (swimlanes + arrows)."""
+    slide, W, H = slide_bg(prs)
+    title_bar(slide, W, subtitle_right="Runtime sequence  ·  request lifecycle")
+
+    add_text(
+        slide, Inches(0.35), Inches(0.82), W - Inches(0.7), Inches(0.42),
+        "One request across the actors that actually cooperate at runtime. "
+        "Read top-to-bottom; each arrow is a real hop with real latency.",
+        size=11, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
+    )
+
+    actors = [
+        ("User",         "entry"),
+        ("AI Gateway",   "model"),
+        ("Planner",      "neutral"),
+        ("Memory",       "data"),
+        ("Retrieval",    "data"),
+        ("Model",        "model"),
+        ("Tools",        "data"),
+        ("Verification", "security"),
+    ]
+    n = len(actors)
+    top_bar_y = Inches(1.4)
+    top_bar_h = Inches(0.55)
+    lane_top = top_bar_y + top_bar_h
+    lane_bottom = H - Inches(1.1)
+    lane_h = lane_bottom - lane_top
+
+    left_pad = Inches(0.35)
+    total_w = W - Inches(0.7)
+    col_w = total_w / n
+
+    # headers + vertical lifelines
+    for i, (name, kind) in enumerate(actors):
+        cx = left_pad + col_w * i + col_w / 2
+        # header pill
+        pill_w = col_w - Inches(0.15)
+        pill_x = cx - pill_w / 2
+        fill, border, tcol = PALETTE[kind]
+        add_box(slide, pill_x, top_bar_y, pill_w, top_bar_h,
+                fill, border, name,
+                font_size=12, text_color=tcol, title_size=12, bold_title=True)
+        # dashed lifeline
+        _connector(slide, MSO_CONNECTOR.STRAIGHT,
+                   cx, lane_top, cx, lane_bottom,
+                   color="#B8C1CC", weight=1.0, dashed=True)
+
+    # sequence steps: (from_idx, to_idx, label, y_offset_fraction, color)
+    def lane_x(i):
+        return int(left_pad + col_w * i + col_w / 2)
+
+    steps = [
+        (0, 1, "1  request + auth",                     "#3B7DDD"),
+        (1, 2, "2  policy pass · plan",                 "#3B7DDD"),
+        (2, 3, "3  fetch session + memory",             "#16A085"),
+        (3, 2, "     history + profile",                "#16A085"),
+        (2, 4, "4  retrieve (vector · BM25 · graph)",   "#16A085"),
+        (4, 2, "     ranked chunks",                    "#16A085"),
+        (2, 5, "5  prompt + input guardrails · call",   "#8E44AD"),
+        (5, 2, "     draft answer + tool calls",        "#8E44AD"),
+        (2, 6, "6  execute tool (MCP · impact class)",  "#B58900"),
+        (6, 2, "     tool result",                      "#B58900"),
+        (2, 7, "7  verify (ground · cite · policy)",    "#C0392B"),
+        (7, 2, "     verdict + citations",              "#C0392B"),
+        (2, 1, "8  final response",                     "#3B7DDD"),
+        (1, 0, "9  stream response",                    "#3B7DDD"),
+    ]
+
+    n_steps = len(steps)
+    # distribute y positions across lane height
+    label_h = Inches(0.26)
+    step_gap = (lane_h - Inches(0.4)) / n_steps
+    for k, (a, b, label, color) in enumerate(steps):
+        y = int(lane_top + Inches(0.15) + step_gap * k)
+        x1 = lane_x(a); x2 = lane_x(b)
+        # arrow line + head
+        left_end = min(x1, x2); right_end = max(x1, x2)
+        _connector(slide, MSO_CONNECTOR.STRAIGHT,
+                   left_end, y, right_end, y,
+                   color=color, weight=1.75)
+        head_w = Inches(0.18); head_h = Inches(0.22)
+        if x2 > x1:  # right-pointing
+            _arrow_shape(slide, right_end - head_w, y - head_h / 2,
+                         head_w, head_h, "right", color)
+            tx = left_end + Inches(0.05)
+            tw = right_end - left_end - Inches(0.25)
+            align = PP_ALIGN.LEFT
+        else:        # left-pointing
+            _arrow_shape(slide, left_end, y - head_h / 2,
+                         head_w, head_h, "left", color)
+            tx = left_end + Inches(0.2)
+            tw = right_end - left_end - Inches(0.25)
+            align = PP_ALIGN.LEFT
+        add_text(slide, tx, y - Inches(0.24), tw, label_h,
+                 label, size=9.5, color=color, align=align, bold=True)
+
+    slide_footer(slide, W, H,
+                 text="Sequence diagram · not a layered stack. Every arrow is a hop, a timeout, "
+                      "a retry, an SLO. Solid arrow = call ·  return arrow = response.")
+
+
+def build_verification_pipeline(prs: Presentation):
+    """L9 Verification expanded to a 10-stage pipeline."""
+    slide, W, H = slide_bg(prs)
+    title_bar(slide, W, subtitle_right="L9 · Verification pipeline")
+
+    add_text(
+        slide, Inches(0.35), Inches(0.85), W - Inches(0.7), Inches(0.45),
+        "Verification ≠ evaluation. Every model output passes through this pipeline before it reaches the user.",
+        size=13, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
+    )
+
+    # top: input & output pills
+    stages = [
+        ("Grounding",      "Is every claim supported by retrieved context?"),
+        ("Citation",       "Are sources attached, valid, resolvable?"),
+        ("Semantic",       "Does the answer address the actual question?"),
+        ("Constraint",     "Structural: schema · format · length · language."),
+        ("Execution",      "Generated code / SQL executes without harm."),
+        ("Policy",         "Enterprise policy · role · jurisdiction · data class."),
+        ("Safety",         "Toxicity · self-harm · CSAM · disallowed content."),
+        ("Business Rules", "Pricing · discount · escalation · SLA guardrails."),
+        ("Confidence",     "Calibrated uncertainty score · abstain threshold."),
+        ("Approval",       "HITL for high-impact · async review queue."),
+    ]
+
+    # two rows of 5
+    top1 = Inches(1.55)
+    row_gap = Inches(0.55)
+    row_h = Inches(2.05)
+    cols = 5
+    left_pad = Inches(0.35)
+    total_w = W - Inches(0.7)
+    gap = Inches(0.14)
+    bw = (total_w - gap * (cols - 1)) / cols
+
+    for i, (name, body) in enumerate(stages):
+        row = i // cols
+        col = i % cols
+        x = left_pad + (bw + gap) * col
+        y = top1 + (row_h + row_gap) * row
+        fill, border, tcol = PALETTE["security"]
+        # numbered chip on top-left (wider for two-digit numbers)
+        two_digit = (i + 1) >= 10
+        chip_w = Inches(0.6 if two_digit else 0.42)
+        chip_h = Inches(0.42)
+        chip = slide.shapes.add_shape(
+            MSO_SHAPE.OVAL, int(x + Inches(0.08)), int(y - chip_h / 2),
+            chip_w, chip_h,
+        )
+        chip.fill.solid()
+        chip.fill.fore_color.rgb = hex_to_rgb("#C0392B")
+        chip.line.color.rgb = hex_to_rgb("#C0392B")
+        ctf = chip.text_frame; ctf.vertical_anchor = MSO_ANCHOR.MIDDLE
+        cp = ctf.paragraphs[0]; cp.alignment = PP_ALIGN.CENTER
+        cr = cp.add_run(); cr.text = str(i + 1)
+        cr.font.size = Pt(12); cr.font.bold = True
+        cr.font.color.rgb = hex_to_rgb("#FFFFFF"); cr.font.name = "Segoe UI"
+
+        add_box(slide, x, y, bw, row_h, fill, border, body,
+                title=name, title_size=13, font_size=10.5,
+                title_color=tcol, text_color=tcol, align_left=True)
+
+        # right arrow to next in the same row
+        if col < cols - 1:
+            ax = x + bw
+            ay = y + row_h / 2 - Inches(0.11)
+            _arrow_shape(slide, ax - Inches(0.02), ay,
+                         gap + Inches(0.04), Inches(0.22),
+                         "right", "#C0392B")
+
+    # curved-ish arrow row1-end → row2-start (drawn as a down arrow under row1-last)
+    last1_x = left_pad + (bw + gap) * (cols - 1) + bw / 2
+    first2_x = left_pad + bw / 2
+    mid_y = top1 + row_h + Inches(0.15)
+    # down from row1 last
+    _arrow_shape(slide, last1_x - Inches(0.11), mid_y,
+                 Inches(0.22), Inches(0.25), "down", "#C0392B")
+    # horizontal line across
+    _connector(slide, MSO_CONNECTOR.STRAIGHT,
+               last1_x, mid_y + Inches(0.25),
+               first2_x, mid_y + Inches(0.25),
+               color="#C0392B", weight=1.5)
+    # left arrow head down into row 2 first
+    _arrow_shape(slide, first2_x - Inches(0.11), mid_y + Inches(0.25),
+                 Inches(0.22), Inches(0.25), "down", "#C0392B")
+
+    slide_footer(slide, W, H,
+                 text="Any stage may VETO · abstain · escalate to HITL · downgrade confidence · request re-generation.")
+
+
+def build_platform_services(prs: Presentation):
+    """Platform services sitting between AI layer and infrastructure."""
+    slide, W, H = slide_bg(prs)
+    title_bar(slide, W, subtitle_right="Platform services  ·  the middle plane")
+
+    add_text(
+        slide, Inches(0.35), Inches(0.85), W - Inches(0.7), Inches(0.5),
+        "Between the AI reasoning layer and cloud infrastructure sits a platform layer of "
+        "shared, stateful services. Enterprise AI stands or falls on this middle.",
+        size=13, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
+    )
+
+    services = [
+        ("Redis / Cache",       "Semantic · prompt · response caches",      "cache"),
+        ("Kafka / Event Bus",   "Async pipelines · streaming events",       "obs"),
+        ("Scheduler",           "Cron · workflows · DAGs · Airflow / Argo", "neutral"),
+        ("Configuration",       "App Config · Consul · git-versioned",      "neutral"),
+        ("Secrets",             "Key Vault · Vault · KMS · rotation",       "security"),
+        ("Feature Flags",       "Progressive delivery · kill-switches",     "obs"),
+        ("Workflow Registry",   "Named agents · SOPs · replayable runs",    "data"),
+        ("Prompt Registry",     "Versioned prompts · A/B · rollback",       "data"),
+        ("Policy Engine",       "OPA · Cedar · content + tool policies",    "security"),
+        ("Artifact Registry",   "Signed containers · SBOM · attestations",  "neutral"),
+        ("Model Registry",      "Foundation · fine-tuned · shadow · prod",  "model"),
+        ("Tool Registry",       "MCP servers · impact class · rate limit",  "data"),
+    ]
+
+    cols = 4
+    rows = 3
+    top = Inches(1.55)
+    left_pad = Inches(0.35)
+    total_w = W - Inches(0.7)
+    gap_x = Inches(0.14)
+    gap_y = Inches(0.14)
+    bw = (total_w - gap_x * (cols - 1)) / cols
+    total_h = H - top - Inches(0.5)
+    bh = (total_h - gap_y * (rows - 1)) / rows
+
+    for i, (name, body, kind) in enumerate(services):
+        col = i % cols
+        row = i // cols
+        x = left_pad + (bw + gap_x) * col
+        y = top + (bh + gap_y) * row
+        fill, border, tcol = PALETTE[kind]
+        add_box(slide, x, y, bw, bh, fill, border, body,
+                title=name, title_size=13, font_size=10.5,
+                title_color=tcol, text_color=tcol, align_left=True)
+
+    slide_footer(slide, W, H)
+
+
+def build_deployment_view(prs: Presentation):
+    """Physical deployment view (Azure-anchored, notes for AWS/GCP/OSS)."""
+    slide, W, H = slide_bg(prs)
+    title_bar(slide, W, subtitle_right="Deployment view  ·  physical architecture")
+
+    add_text(
+        slide, Inches(0.35), Inches(0.85), W - Inches(0.7), Inches(0.45),
+        "Logical architecture ≠ deployment architecture. Here is what actually runs, autoscales and pages someone at 3 AM.",
+        size=13, italic=True, color="#5A6470", align=PP_ALIGN.LEFT,
+    )
+
+    # top row: edge
+    edge_top = Inches(1.45)
+    edge_h = Inches(0.55)
+    edge = [
+        ("Internet",        "entry"),
+        ("Front Door / CDN",   "entry"),
+        ("WAF · DDoS · Bot",   "security"),
+        ("Private Endpoint", "security"),
+    ]
+    left_pad = Inches(0.35)
+    total_w = W - Inches(0.7)
+    gap = Inches(0.14)
+    n_e = len(edge)
+    bwe = (total_w - gap * (n_e - 1)) / n_e
+    for i, (label, kind) in enumerate(edge):
+        x = left_pad + (bwe + gap) * i
+        fill, border, tcol = PALETTE[kind]
+        add_box(slide, x, edge_top, bwe, edge_h, fill, border, label,
+                font_size=11, text_color=tcol, title_size=11, bold_title=True)
+        if i < n_e - 1:
+            ax = x + bwe
+            ay = edge_top + edge_h / 2 - Inches(0.11)
+            _arrow_shape(slide, ax - Inches(0.02), ay,
+                         gap + Inches(0.04), Inches(0.22),
+                         "right", "#3B7DDD")
+
+    # middle: compute cluster (AKS / ECS / GKE / K8s)
+    mid_top = edge_top + edge_h + Inches(0.35)
+    mid_h = Inches(2.4)
+    fill, border, tcol = PALETTE["neutral"]
+
+    # container box for the cluster
+    cluster = slide.shapes.add_shape(
+        MSO_SHAPE.ROUNDED_RECTANGLE,
+        left_pad, mid_top, total_w, mid_h,
+    )
+    cluster.fill.solid()
+    cluster.fill.fore_color.rgb = hex_to_rgb("#F7F9FC")
+    cluster.line.color.rgb = hex_to_rgb("#2C3E50")
+    cluster.line.width = Pt(1.5)
+    tf = cluster.text_frame
+    tf.margin_left = Inches(0.15); tf.margin_top = Inches(0.1)
+    tf.margin_right = Inches(0.15); tf.margin_bottom = Inches(0.1)
+    tf.vertical_anchor = MSO_ANCHOR.TOP; tf.word_wrap = True
+    tp = tf.paragraphs[0]; tp.alignment = PP_ALIGN.LEFT
+    tr = tp.add_run()
+    tr.text = "AKS  ·  Container Apps  ·  (or  ECS · GKE · K8s)   —   HPA + KEDA + GPU scheduler + PodDisruptionBudget"
+    tr.font.size = Pt(12); tr.font.bold = True
+    tr.font.color.rgb = hex_to_rgb("#1B2A3A"); tr.font.name = "Segoe UI"
+
+    # inner pods
+    inner_top = mid_top + Inches(0.55)
+    inner_h = mid_h - Inches(0.75)
+    pods = [
+        ("Gateway pods",     "APIM sidecar\n5–50 replicas\nHPA on RPS",       "entry"),
+        ("Orchestrator pods","Container Apps\n3–30 replicas\nHPA on queue",   "neutral"),
+        ("Agent workers",    "GPU nodepool\n2–20 replicas\nKEDA on Kafka",    "model"),
+        ("Tool executors",   "Sandboxed\n5–30 replicas\nrate limited",        "data"),
+        ("Verifier pods",    "CPU nodepool\n3–15 replicas\nHPA on backlog",   "security"),
+    ]
+    n_p = len(pods)
+    gap_p = Inches(0.12)
+    bwp = (total_w - Inches(0.3) - gap_p * (n_p - 1)) / n_p
+    for i, (t, body, kind) in enumerate(pods):
+        x = left_pad + Inches(0.15) + (bwp + gap_p) * i
+        fill, border, tcol = PALETTE[kind]
+        add_box(slide, x, inner_top, bwp, inner_h, fill, border, body,
+                title=t, title_size=11, font_size=9.5,
+                title_color=tcol, text_color=tcol, align_left=True)
+
+    # bottom row: managed data & AI services + observability sink
+    bot_top = mid_top + mid_h + Inches(0.3)
+    bot_h = Inches(1.4)
+    bot_services = [
+        ("Redis Enterprise", "cache + rate-limit\nzone-redundant",      "cache"),
+        ("Qdrant / AI Search","vector index\nreplicated",               "data"),
+        ("Cosmos DB",        "session + memory\nmulti-region",          "data"),
+        ("Azure OpenAI",     "AOAI · Foundry\nprovisioned + PAYG",      "model"),
+        ("Blob Storage",     "docs · attachments\nlifecycle rules",     "neutral"),
+        ("OpenTelemetry",    "Collector →\nApp Insights / Grafana",     "obs"),
+    ]
+    n_b = len(bot_services)
+    bwb = (total_w - gap * (n_b - 1)) / n_b
+    for i, (t, body, kind) in enumerate(bot_services):
+        x = left_pad + (bwb + gap) * i
+        fill, border, tcol = PALETTE[kind]
+        add_box(slide, x, bot_top, bwb, bot_h, fill, border, body,
+                title=t, title_size=11, font_size=9.5,
+                title_color=tcol, text_color=tcol, align_left=True)
+
+    slide_footer(slide, W, H,
+                 text="Same shape on AWS (EKS + ElastiCache + OpenSearch + Bedrock + S3 + CloudWatch) "
+                      "and GCP (GKE + Memorystore + Vertex + GCS + Cloud Ops).")
+
+
 # ---------- main ---------- #
 
 def main():
@@ -872,23 +1585,26 @@ def main():
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
 
-    build_hero(prs)                # 1  Hero
-    build_problem(prs)             # 2  Problem
-    build_what_is(prs)             # 3  What is EASRA?
-    build_principles(prs)          # 4  Design principles
-    build_layer_index(prs)         # 5  The 16 layers
-    build_architecture(prs)        # 6  High-level architecture
-    build_trust_boundaries(prs)    # 7  Trust boundaries
-    build_runtime_flow(prs)        # 8  Runtime execution flow
-    build_llmops(prs)              # 9  LLMOps & delivery
-    build_cloud_mapping(prs)       # 10 Cloud implementations
-    build_standards(prs)           # 11 Standards mapping
-    build_deliverables(prs)        # 12 Ten deliverables
-    build_cta(prs)                 # 13 CTA
+    build_hero_v2(prs)               # 1   Cover (benefits, not stats)
+    build_problem(prs)               # 2   Problem
+    build_what_is(prs)               # 3   What is EASRA?
+    build_capability_ladder(prs)     # 4   TOGAF-style ladder      [NEW]
+    build_principles(prs)            # 5   Ten design principles
+    build_layer_index(prs)           # 6   Sixteen layers
+    build_architecture_v2(prs)       # 7   Production runtime arch [REDESIGN]
+    build_runtime_sequence(prs)      # 8   Sequence diagram        [REDESIGN]
+    build_trust_boundaries(prs)      # 9   Four trust boundaries
+    build_verification_pipeline(prs) # 10  Verification pipeline   [NEW]
+    build_platform_services(prs)     # 11  Platform services       [NEW]
+    build_deployment_view(prs)       # 12  Deployment view         [NEW]
+    build_llmops(prs)                # 13  LLMOps & delivery
+    build_cloud_mapping(prs)         # 14  Cloud implementations
+    build_standards(prs)             # 15  Standards mapping
+    build_cta(prs)                   # 16  CTA
 
     out = Path(__file__).parent / "EASRA-LinkedIn-Carousel.pptx"
     prs.save(out)
-    print(f"Wrote {out}  ({out.stat().st_size / 1024:.1f} KB, {len(prs.slides.__iter__.__self__._sldIdLst)} slides)")
+    print(f"Wrote {out}  ({out.stat().st_size / 1024:.1f} KB, {len(list(prs.slides))} slides)")
 
 
 if __name__ == "__main__":
