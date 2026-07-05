@@ -29,6 +29,8 @@ config:
   # Empty links / spaces-inside-links — occasional false positives from tables.
   MD039: false
   MD042: false
+  # Table column pipe alignment — cosmetic and inconsistent across GitHub renderers.
+  MD060: false
 
 globs:
   - "**/*.md"
