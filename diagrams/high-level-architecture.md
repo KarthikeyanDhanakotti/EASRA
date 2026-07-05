@@ -205,14 +205,14 @@ flowchart TB
     L0 -->|"render"| U
 
     %% Cache plane sits alongside the reasoning stack
-    CB -. lookup .-> CACHE
-    PB -. lookup .-> PC
-    RR -. lookup .-> EC
-    MR -. lookup .-> SC
-    VE -. lookup .-> RC
-    MM -. lookup .-> MC
-    MR -. accrue .-> LEDGER
-    TR -. accrue .-> LEDGER
+    CB -.->|"lookup"| CACHE
+    PB -.->|"lookup"| PC
+    RR -.->|"lookup"| EC
+    MR -.->|"lookup"| SC
+    VE -.->|"lookup"| RC
+    MM -.->|"lookup"| MC
+    MR -.->|"accrue"| LEDGER
+    TR -.->|"accrue"| LEDGER
 
     %% CI/CD → runtime
     GH --> CI --> AR --> CD
@@ -223,21 +223,21 @@ flowchart TB
     CD -.->|deploy| VER
 
     %% Cross-cutting attachments (dotted, symbolic)
-    SEC -. attaches to every layer .-> EDGE
-    SEC -. .-> ORCH
-    SEC -. .-> MOD
-    SEC -. .-> TOOL
-    OBS -. traces every hop .-> EDGE
-    OBS -. .-> ORCH
-    OBS -. .-> MOD
-    OBS -. .-> TOOL
-    OBS -. .-> GR
-    OBS -. .-> VER
-    GOV -. policies enforced at .-> GR
-    GOV -. .-> TOOL
-    GOV -. .-> MOD
-    BIZ -. metrics from .-> CACHE
-    BIZ -. .-> MOD
+    SEC -.->|"attaches to every layer"| EDGE
+    SEC -.-> ORCH
+    SEC -.-> MOD
+    SEC -.-> TOOL
+    OBS -.->|"traces every hop"| EDGE
+    OBS -.-> ORCH
+    OBS -.-> MOD
+    OBS -.-> TOOL
+    OBS -.-> GR
+    OBS -.-> VER
+    GOV -.->|"policies enforced at"| GR
+    GOV -.-> TOOL
+    GOV -.-> MOD
+    BIZ -.->|"metrics from"| CACHE
+    BIZ -.-> MOD
 
     %% Infrastructure substrate
     INFRA -.->|hosts| ORCH
