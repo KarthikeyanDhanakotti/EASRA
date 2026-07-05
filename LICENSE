@@ -1,0 +1,83 @@
+EASRA — Enterprise AI Systems Reference Architecture
+Copyright 2026 Karthikeyan Dhanakotti and EASRA Contributors
+
+================================================================================
+DUAL LICENSING
+================================================================================
+
+This repository contains two categories of work, each covered by a separate
+license:
+
+1. DOCUMENTATION, SPECIFICATIONS, AND DIAGRAMS
+   All Markdown files, specification documents, diagrams (Mermaid, drawio,
+   images), the handbook, ADRs, and research notes are licensed under:
+
+   Creative Commons Attribution 4.0 International (CC-BY-4.0)
+   https://creativecommons.org/licenses/by/4.0/legalcode
+
+   You are free to share and adapt the material for any purpose, including
+   commercially, provided you give appropriate attribution to EASRA and its
+   maintainers.
+
+2. SOURCE CODE AND REFERENCE IMPLEMENTATION
+   All source code, including the contents of `reference-implementation/`,
+   `examples/`, and any code snippets embedded within the documentation,
+   is licensed under:
+
+   Apache License, Version 2.0
+   http://www.apache.org/licenses/LICENSE-2.0
+
+================================================================================
+APACHE LICENSE 2.0
+================================================================================
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+The full text of the Apache License 2.0 is available at the URL above and is
+incorporated here by reference.
+
+================================================================================
+CC-BY-4.0 SUMMARY
+================================================================================
+
+Attribution 4.0 International (CC BY 4.0)
+
+You are free to:
+  * Share  — copy and redistribute the material in any medium or format
+  * Adapt  — remix, transform, and build upon the material for any purpose,
+             even commercially.
+
+Under the following terms:
+  * Attribution — You must give appropriate credit, provide a link to the
+    license, and indicate if changes were made. You may do so in any
+    reasonable manner, but not in any way that suggests the licensor
+    endorses you or your use.
+
+No additional restrictions — You may not apply legal terms or technological
+measures that legally restrict others from doing anything the license permits.
+
+Full text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+================================================================================
+ATTRIBUTION EXAMPLE
+================================================================================
+
+When citing or reusing EASRA material, please use:
+
+  "Based on the Enterprise AI Systems Reference Architecture (EASRA),
+   Karthikeyan Dhanakotti et al., 2026. Licensed under CC-BY-4.0.
+   https://github.com/KarthikeyanDhanakotti/EASRA"

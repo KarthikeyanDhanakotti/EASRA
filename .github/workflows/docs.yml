@@ -1,0 +1,70 @@
+name: docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  markdown-lint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install markdownlint-cli2
+        run: npm install -g markdownlint-cli2
+      - name: Lint Markdown
+        run: markdownlint-cli2 "**/*.md" "#node_modules"
+
+  link-check:
+    name: Link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check internal links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --exclude-mail --exclude-loopback --exclude "^https?://" "**/*.md"
+          fail: true
+
+  mermaid-validate:
+    name: Mermaid validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install mermaid-cli
+        run: npm install -g @mermaid-js/mermaid-cli
+      - name: Extract and validate Mermaid blocks
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/mermaid
+          fail=0
+          i=0
+          # Extract every fenced ```mermaid block and try to render.
+          for f in $(git ls-files '*.md'); do
+            awk '/^```mermaid$/{flag=1;next}/^```$/{flag=0}flag' "$f" \
+              | awk -v file="$f" -v RS='' '{print NR": "file; print $0; print "---MERMAID-END---"}' >> .tmp/mermaid/all.txt
+          done
+          if [ ! -s .tmp/mermaid/all.txt ]; then
+            echo "No Mermaid blocks found. Skipping."
+            exit 0
+          fi
+          awk 'BEGIN{i=0}/^---MERMAID-END---$/{i++;out="";next}{if(!header){header=$0;next}print $0 > ".tmp/mermaid/block-"i".mmd"}' .tmp/mermaid/all.txt
+          for m in .tmp/mermaid/block-*.mmd; do
+            if [ -s "$m" ]; then
+              if ! mmdc -i "$m" -o "$m.svg" -q > /dev/null 2>&1; then
+                echo "::error file=$m::Mermaid render failed"
+                fail=1
+              fi
+            fi
+          done
+          exit $fail

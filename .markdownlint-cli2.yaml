@@ -1,0 +1,26 @@
+# markdownlint-cli2 configuration for EASRA
+# Docs are the product here — we lint for consistency, not to be pedantic.
+
+config:
+  default: true
+  # Allow long lines — we keep one-sentence-per-line for diff-friendly specs.
+  MD013: false
+  # Allow inline HTML in specific tags (used for centered README header).
+  MD033:
+    allowed_elements: ["div", "br", "sub", "sup"]
+  # Allow duplicate H1s across files (we use them in per-chapter files).
+  MD025:
+    front_matter_title: ""
+  # Don't require language tag on all fences (ASCII diagrams have none).
+  MD040: false
+  # Allow bare URLs in changelog entries.
+  MD034: false
+  # Ordered list numbering — we sometimes use natural numbering for readability.
+  MD029: false
+
+globs:
+  - "**/*.md"
+
+ignores:
+  - "node_modules/**"
+  - ".tmp/**"
