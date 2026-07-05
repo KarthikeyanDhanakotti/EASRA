@@ -1106,7 +1106,7 @@ def build_architecture_v2(prs: Presentation):
     )
     add_text(
         slide, ai_x + Inches(0.05), cap_y, bw1 - Inches(0.1), Inches(0.28),
-        "Routing · retries · circuit",
+        "Routing · retries",
         size=8.5, italic=True, color="#8E44AD", align=PP_ALIGN.LEFT,
     )
 
@@ -1154,14 +1154,15 @@ def build_architecture_v2(prs: Presentation):
                    x + bw3 - Inches(0.15), row2_top + row2_h,
                    color="#16A085", weight=1.25, dashed=True)
 
-    # -------- Row 4: Verification pipeline + Guardrails -------- #
+    # -------- Row 4: Response pipeline (right-to-left: response starts at
+    # L9 Verification rightmost, flows LEFT back toward the User) -------- #
     row4_top = row3_top + row3_h + Inches(0.3)
     row4_h = Inches(0.6)
     verify = [
-        ("L9 Verification",  "security"),
-        ("L8 Guardrails",    "security"),
-        ("Response Format",  "obs"),
         ("L1 Streaming",     "entry"),
+        ("Response Format",  "obs"),
+        ("L8 Guardrails",    "security"),
+        ("L9 Verification",  "security"),
     ]
     n4 = len(verify)
     gap4 = Inches(0.14)
@@ -1171,16 +1172,18 @@ def build_architecture_v2(prs: Presentation):
         fill, border, tcol = PALETTE[kind]
         add_box(slide, x, row4_top, bw4, row4_h, fill, border, label,
                 font_size=11, text_color=tcol, title_size=11, bold_title=True)
-        if i < n4 - 1:
-            ax = x + bw4
+        # LEFT-pointing arrow from this box back to the previous (response flow)
+        if i > 0:
+            ax = x - gap4 - Inches(0.02)
             ay = row4_top + row4_h / 2 - Inches(0.11)
-            _arrow_shape(slide, ax - Inches(0.02), ay,
+            _arrow_shape(slide, ax, ay,
                          gap4 + Inches(0.04), Inches(0.22),
-                         "right", "#C0392B")
+                         "left", "#C0392B")
 
-    # arrow from core row down to verification (single central down arrow)
-    cx = left_pad + main_w / 2
-    _arrow_shape(slide, cx - Inches(0.11),
+    # arrow from L6 Model Router (rightmost row 3) down to L9 Verification
+    # (rightmost row 4) — column-aligned so the response flow reads naturally.
+    verif_cx = left_pad + (bw4 + gap4) * (n4 - 1) + bw4 / 2
+    _arrow_shape(slide, verif_cx - Inches(0.11),
                  row3_top + row3_h + Inches(0.02),
                  Inches(0.22), Inches(0.22), "down", "#C0392B")
 
