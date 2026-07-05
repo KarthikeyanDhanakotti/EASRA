@@ -1197,6 +1197,27 @@ def build_architecture_v2(prs: Presentation):
         size=11, italic=True, color="#0B3D91", align=PP_ALIGN.CENTER,
     )
 
+    # visual L-shape closing the loop: L1 Streaming → up the left gutter → User
+    gutter_x = Inches(0.14)
+    stream_left_x = left_pad
+    stream_mid_y = row4_top + row4_h / 2
+    user_left_x = left_pad
+    user_mid_y = row1_top + row1_h / 2
+    # short left stub from L1 Streaming
+    _connector(slide, MSO_CONNECTOR.STRAIGHT,
+               stream_left_x, stream_mid_y,
+               gutter_x, stream_mid_y,
+               color="#16A085", weight=1.5, dashed=True)
+    # long vertical up through left gutter
+    _connector(slide, MSO_CONNECTOR.STRAIGHT,
+               gutter_x, stream_mid_y,
+               gutter_x, user_mid_y,
+               color="#16A085", weight=1.5, dashed=True)
+    # right-pointing arrow into the User box (arrow head here)
+    _arrow_shape(slide, gutter_x, user_mid_y - Inches(0.09),
+                 user_left_x - gutter_x, Inches(0.18),
+                 "right", "#16A085")
+
     # -------- Right sidebar: Event bus + async workers + DLQ -------- #
     sb_top = top_area
     sb_h = row4_top + row4_h - sb_top
@@ -1222,6 +1243,18 @@ def build_architecture_v2(prs: Presentation):
                 fill, border, body,
                 title=t, title_size=11, font_size=9.5,
                 title_color=tcol, text_color=tcol, align_left=True)
+
+    # Event Bus → Async Workers: single dashed amber arrow to imply the
+    # sidebar flow (bus dispatches to workers; DLQ / Retry / Outbox stack
+    # implicitly below).
+    eb_bottom_y = sb_top + Inches(0.5)
+    workers_top_y = it_top
+    sb_arrow_x = sidebar_left + sidebar_w / 2
+    _arrow_shape(slide,
+                 sb_arrow_x - Inches(0.09),
+                 eb_bottom_y + Inches(0.01),
+                 Inches(0.18), workers_top_y - eb_bottom_y - Inches(0.02),
+                 "down", "#B58900")
 
     # dashed L-shape: core (top of row 3) → UP the gutter → into Event Bus.
     # Terminates at the Event Bus card (top of sidebar), not the Retry Queue.
