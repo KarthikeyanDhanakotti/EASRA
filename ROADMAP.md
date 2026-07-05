@@ -149,13 +149,13 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 
 ## Standard Deliverables (cross-phase)
 
-EASRA is structured as an open standard with ten deliverables. Each has its own maturity trajectory that cuts across the phases above.
+EASRA is structured as an open standard with ten deliverables. Each has its own maturity trajectory that cuts across the phases above. Living status: [`checklists/standard-deliverables-status.md`](./checklists/standard-deliverables-status.md).
 
 | # | Deliverable | v0.1 | v0.5 | v1.0 |
 |---|-------------|------|------|------|
 | 1 | Architecture Specification | ✅ 12 specs (draft) | Spec 013 conformance + 014 standards mapping | Frozen |
 | 2 | Handbook | Scaffolded | All 16 layers written | Reviewed |
-| 3 | Reference Architectures | 5 views scaffolded, 5 diagrams done | 25 diagrams complete | Reviewed |
+| 3 | Reference Architectures | 5 views scaffolded, 6 diagrams done | 25 diagrams complete | Reviewed |
 | 4 | Cloud Implementations | 4 mapping guides draft | + IaC scaffolds | Per-cloud reference impl |
 | 5 | Benchmarks | Categories + workloads defined | First result set | Adopter results published |
 | 6 | ADRs | Active | Complete for v1.0 decisions | Frozen for v1.0 |
@@ -163,6 +163,14 @@ EASRA is structured as an open standard with ten deliverables. Each has its own 
 | 8 | Verification Reference | Classes + checker catalogue draft | Reference checkers implemented | Golden sets published |
 | 9 | LLMOps Guide | Draft | AI-specific runbooks complete | Reviewed |
 | 10 | Conference Materials | Slot list | Keynote + deep-dive + workshop | Delivered at ≥ 3 events |
+
+### Cross-cutting artefact deliverables
+
+| Artefact | v0.1 | v0.5 | v1.0 |
+|----------|------|------|------|
+| Checklists | ✅ 6 checklists (repo-quality / adoption / security / verification / LLMOps / status) | + threat-model / red-team / release checklists | Reviewed |
+| Templates | ✅ 6 templates (profile README / repo starter / capability maturity / threat model / benchmark spec / style guide) | + IaC starter / eval-set starter | Reviewed |
+| Docs site | Folder + tooling ADR pending | Rendered site under GitHub Pages / custom domain | Versioned docs |
 
 ## Phase 8 — Research (parallel to all phases)
 

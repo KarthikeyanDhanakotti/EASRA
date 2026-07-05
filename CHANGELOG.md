@@ -5,6 +5,9 @@ All notable changes to EASRA are recorded here. The format is based on [Keep a C
 ## [Unreleased]
 
 ### Added
+- `docs/` — documentation-site folder with planned site map and tooling candidate matrix (MkDocs Material / Docusaurus / Nextra); ADR pending.
+- `checklists/` — six concrete, reviewable checklists: Repository Quality (20 items), Adoption Assessment (per-capability + NFR + boundary), Security Review (identity / injection / tool safety / data / model / verification / standards / sign-off), Verification Readiness (7 classes + metrics + golden sets + continuous + anti-patterns), LLMOps Readiness (delivery / lifecycles / evaluation / cost / observability / SLOs / incident / multi-region), and Standard Deliverables Status.
+- `templates/` — six reusable templates: GitHub Profile README (ready-to-paste), Repository Starter (`repository-template/`), Capability Maturity Statement, Threat Model, Benchmark Spec, Ecosystem Style Guide (writing / naming / diagrams / colour palette / logos / licensing / governance).
 - `implementations/` — vendor mapping guides for Azure, AWS, GCP, and open-source (Kubernetes + CNCF), each with per-layer + trust-boundary + NFR mapping and known-gap sections.
 - `benchmarks/` — benchmark categories (latency, throughput, cost, safety, verification, reliability, cache, continuous eval), reference workloads (W-SARAG / W-MAC / W-TOOL / W-STREAM / W-INJ / W-COST), and benchmark-spec skeleton.
 - `security-reference/` — threat catalogue (OWASP LLM Top 10 + MITRE ATLAS mapped to EASRA layers), controls catalogue, standards-mapping status, threat-model roster, red-team + incident-response outlines.
@@ -18,9 +21,11 @@ All notable changes to EASRA are recorded here. The format is based on [Keep a C
 - Diagram D-R1 — Master Runtime Execution Flow (`diagrams/runtime-execution-flow.md`), showing decision points, cache lookups, guardrails, model fallback, tool impact-class gating, verification verdicts, and streaming.
 
 ### Changed
-- `README.md` — repositioned EASRA as an **open architecture standard** with 10 explicit deliverables; adds Standard Deliverables table with status; refreshed nav bar and repo structure.
+- `README.md` — nav bar now includes Checklists and Templates; repo structure updated to include `docs/`, `checklists/`, `templates/`.
+- `ROADMAP.md` — Standard Deliverables table refreshed; added Cross-cutting artefact deliverables row for checklists, templates, and docs site.
+- `README.md` — repositioned EASRA as an **open architecture standard** with 10 explicit deliverables; adds Standard Deliverables table with status.
 - `specification/README.md` — reading-order table extended to specs 011 and 012.
-- `ROADMAP.md` — restructured to the reviewer-recommended process: Phase 1 Draft Spec, Phase 2 Capability & Component Freeze, Phase 3 Complete 5-Architecture Diagram Set, Phase 4 Handbook, Phase 5 Cloud mappings (partially done), Phase 6 v1.0, Phase 7 Ecosystem, Phase 8 Research. Added cross-phase Standard Deliverables table.
+- `ROADMAP.md` — restructured to the reviewer-recommended process: Phase 1 Draft Spec, Phase 2 Capability & Component Freeze, Phase 3 Complete 5-Architecture Diagram Set, Phase 4 Handbook, Phase 5 Cloud mappings (partially done), Phase 6 v1.0, Phase 7 Ecosystem, Phase 8 Research.
 
 ## [0.1.0] — 2026-07-05
 

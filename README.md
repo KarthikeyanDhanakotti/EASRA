@@ -9,7 +9,7 @@
 
 *Version 0.1 (Draft) — 2026*
 
-[Specification](./specification/) · [Architectures](./architectures/) · [Handbook](./handbook/) · [Implementations](./implementations/) · [Benchmarks](./benchmarks/) · [Security](./security-reference/) · [Verification](./verification-reference/) · [LLMOps](./llmops-guide/) · [ADRs](./adr/) · [Diagrams](./diagrams/CATALOGUE.md)
+[Specification](./specification/) · [Architectures](./architectures/) · [Handbook](./handbook/) · [Implementations](./implementations/) · [Benchmarks](./benchmarks/) · [Security](./security-reference/) · [Verification](./verification-reference/) · [LLMOps](./llmops-guide/) · [Checklists](./checklists/) · [Templates](./templates/) · [ADRs](./adr/) · [Diagrams](./diagrams/CATALOGUE.md)
 
 </div>
 
@@ -119,6 +119,7 @@ See [architectures/README.md](./architectures/README.md) for the full view.
 
 ```
 EASRA/
+├── docs/                     Documentation-site config and assets (planned MkDocs / Docusaurus / Nextra)
 ├── specification/            12 numbered specification documents (001–012)
 ├── architectures/            Five architecture views (logical, runtime, deployment, operational, security)
 ├── handbook/                 Per-layer chapters and cross-cutting guides
@@ -128,6 +129,8 @@ EASRA/
 ├── security-reference/       Threats, controls, standards mappings, threat models, red-team
 ├── verification-reference/   Verification classes, checkers, metrics, golden-set methodology
 ├── llmops-guide/             Delivery, lifecycle, evaluation strategy, cost, incident response
+├── checklists/               Repository-quality, adoption, security, verification, LLMOps checklists
+├── templates/                Profile README, repo starter, style guide, adopter templates
 ├── examples/                 Worked example architectures (single-agent, multi-agent, RAG, tool-use)
 ├── reference-implementation/ Minimal spec-compliant open-source implementation
 ├── adr/                      Architecture Decision Records
