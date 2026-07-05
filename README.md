@@ -157,7 +157,7 @@ EASRA is a **draft** working toward v1.0. Interfaces and layer boundaries may ch
 ## Citing EASRA
 
 ```
-Dhanakotti, K. (2026). Enterprise AI Systems Reference Architecture (EASRA), v0.1.
+Karthikeyan Dhanakotti. (2026). Enterprise AI Systems Reference Architecture (EASRA), v0.1.
 https://github.com/KarthikeyanDhanakotti/EASRA
 ```
 
