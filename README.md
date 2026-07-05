@@ -24,9 +24,12 @@ There is no widely adopted, vendor-neutral reference architecture for that reali
 ## What EASRA is
 
 - **A layered reference architecture** — 16 logical layers with explicit responsibilities and interfaces.
-- **A specification suite** — 10 numbered specs (introduction, principles, terminology, reference architecture, layers, interfaces, data flow, sequences, trust boundaries, NFRs).
+- **A capability model** — 16 frozen capability domains and their subcapabilities ([Spec 011](./specification/011-capability-model.md)).
+- **A component catalogue** — the frozen inventory of every named component with a stable ID scheme ([Spec 012](./specification/012-component-catalogue.md)).
+- **A specification suite** — 12 numbered specs (introduction, principles, terminology, reference architecture, layers, interfaces, data flow, sequences, trust boundaries, NFRs, capability model, component catalogue).
+- **Five architecture views** — Logical, Runtime, Deployment, Operational, Security ([architectures/](./architectures/)).
+- **A publication-quality diagram library** — inventoried in the [Diagram Catalogue](./diagrams/CATALOGUE.md) (target: ~25 diagrams across the five views).
 - **A handbook** — deep-dive per-layer chapters covering components, patterns, anti-patterns, failure modes, cloud mappings, and production checklists.
-- **A diagram library** — publication-grade architecture, sequence, and trust-boundary diagrams (Mermaid + drawio).
 - **A reference implementation** — an open-source, minimal, spec-compliant Enterprise AI system.
 - **A body of ADRs and research** — decision records and forward-looking work (execution compilers, verification frameworks, benchmarks).
 
@@ -75,15 +78,30 @@ L14  Governance, Risk & Compliance       (cross-cutting)
 L15  Business Outcomes & Value
 ```
 
-The full high-level architecture diagram is in [diagrams/high-level-architecture.md](./diagrams/high-level-architecture.md).
+The full high-level architecture diagram is in [diagrams/high-level-architecture.md](./diagrams/high-level-architecture.md). The complete diagram inventory across all five views is in the [Diagram Catalogue](./diagrams/CATALOGUE.md).
+
+## The Five Architecture Views
+
+EASRA is described through five architecture views, each answering different questions for a different audience. All views derive from the frozen [Capability Model](./specification/011-capability-model.md) and reference only components in the [Component Catalogue](./specification/012-component-catalogue.md).
+
+| View | Answers | Audience | Folder |
+|------|---------|----------|--------|
+| **Logical** | What are the parts and how do they compose? | Architects | [architectures/logical/](./architectures/logical/) |
+| **Runtime** | How does a request execute across the parts? | Engineers, SREs | [architectures/runtime/](./architectures/runtime/) |
+| **Deployment** | Where does each part run, and how is it scaled? | Platform, SRE | [architectures/deployment/](./architectures/deployment/) |
+| **Operational** | How is the system observed, evaluated, delivered? | SRE, LLMOps | [architectures/operational/](./architectures/operational/) |
+| **Security** | What are the trust boundaries and controls? | Security, Audit | [architectures/security/](./architectures/security/) |
+
+See [architectures/README.md](./architectures/README.md) for the full view.
 
 ## Repository Structure
 
 ```
 EASRA/
-├── specification/            10 numbered specification documents (001–010)
+├── specification/            12 numbered specification documents (001–012)
+├── architectures/            Five architecture views (logical, runtime, deployment, operational, security)
 ├── handbook/                 Per-layer chapters and cross-cutting guides
-├── diagrams/                 Publication-grade Mermaid + drawio diagrams
+├── diagrams/                 Publication-grade Mermaid + drawio diagrams (see CATALOGUE.md)
 ├── examples/                 Worked example architectures (single-agent, multi-agent, RAG, tool-use)
 ├── reference-implementation/ Minimal spec-compliant open-source implementation
 ├── adr/                      Architecture Decision Records

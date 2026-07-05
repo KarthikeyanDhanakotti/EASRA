@@ -11,7 +11,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 
 ---
 
-## Phase 1 — Foundation (v0.1 → v0.5)
+## Phase 1 — Draft Specification (v0.1)
 
 **Goal:** publish the complete draft specification and a coherent high-level architecture.
 
@@ -27,12 +27,63 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [x] Specification 009 — Trust Boundaries
 - [x] Specification 010 — Non-Functional Requirements
 - [x] Publication-grade high-level architecture diagram
-- [x] Trust boundary and deployment-topology diagrams
+- [x] Trust boundary, deployment-topology, CI/CD, observability diagrams
 - [x] ADR template + first two ADRs
+- [x] Public repository, docs CI, license, changelog
+
+## Phase 2 — Capability & Component Freeze (v0.1 → v0.3)
+
+**Goal:** freeze the vocabulary and inventory before scaling out diagrams, so every future artefact is derived, not invented.
+
+- [x] Specification 011 — Capability Model (C0–C15 + subcapabilities + 5-level maturity)
+- [x] Specification 012 — Component Catalogue (~60 components with ID scheme K-L*-*)
+- [x] Five-architecture scaffold (`architectures/logical|runtime|deployment|operational|security/`)
+- [x] Diagram Catalogue (`diagrams/CATALOGUE.md`) — 25-diagram inventory with IDs D-L1..S5
+- [x] Master Runtime Execution Flow diagram (D-R1)
 - [ ] Public discussion opened on GitHub Discussions
 - [ ] First external reviewers onboarded
+- [ ] Specification 013 — Conformance Test Suite (planned)
+- [ ] Specification 014 — Standards Mapping (NIST AI RMF, ISO 42001, EU AI Act, OWASP LLM, MITRE ATLAS) (planned)
 
-## Phase 2 — Handbook (v0.5 → v0.9)
+## Phase 3 — Complete the Five-Architecture Diagram Set (v0.3 → v0.7)
+
+**Goal:** ship the remaining ~20 diagrams that turn each of the five architecture views into a reviewable, publication-quality set. Each diagram references only components in [Spec 012](./specification/012-component-catalogue.md).
+
+### Logical view (target: 5 diagrams)
+- [x] D-L1 High-Level Architecture
+- [ ] D-L2 Component Master Diagram
+- [ ] D-L3 Memory Architecture (L4 zoom-in)
+- [ ] D-L4 Knowledge & Retrieval Architecture (L5 zoom-in)
+- [ ] D-L5 Guardrails & Verification Architecture (L8 + L9 zoom-in)
+
+### Runtime view (target: 6 diagrams)
+- [x] D-R1 Master Runtime Execution Flow
+- [x] D-R2..R4 Sequence diagrams S1–S3 (in Spec 008)
+- [ ] D-R5 Guardrail + Verification Decision Flow
+- [ ] D-R6 Cache Lookup Sequence
+
+### Deployment view (target: 5 diagrams)
+- [x] D-D1 Single-Region Topology
+- [ ] D-D2 Multi-Region Active-Active Topology
+- [ ] D-D3 Kubernetes Placement Map
+- [ ] D-D4 State & Cache Placement
+- [ ] D-D5 Disaster Recovery Topology
+
+### Operational view (target: 5 diagrams)
+- [x] D-O1 Observability Plane
+- [x] D-O2 CI/CD Pipeline
+- [ ] D-O3 Continuous Evaluation Loop
+- [ ] D-O4 Cost & Budget Enforcement Loop
+- [ ] D-O5 Incident Response Runbook Overview
+
+### Security view (target: 5 diagrams)
+- [x] D-S1 Trust Boundaries & Planes
+- [ ] D-S2 Zero-Trust Identity Flow
+- [ ] D-S3 Prompt-Injection Defence-in-Depth
+- [ ] D-S4 Data Classification & Residency Flow
+- [ ] D-S5 High-Impact Action Gate & Audit Trail
+
+## Phase 4 — Handbook (v0.7 → v0.9)
 
 **Goal:** deep-dive per-layer chapters that turn the specification into an engineering handbook.
 
@@ -56,7 +107,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [ ] Cross-cutting handbook: Multi-Region & DR
 - [ ] Cross-cutting handbook: Responsible AI
 
-## Phase 3 — Cloud & Implementation Mappings (v0.9 → v1.0-RC)
+## Phase 5 — Cloud & Implementation Mappings (v0.9 → v1.0-RC)
 
 **Goal:** demonstrate that the vendor-neutral architecture maps cleanly to real stacks.
 
@@ -67,7 +118,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [ ] Kubernetes deployment topology
 - [ ] Minimum viable reference implementation (single-agent RAG, spec-compliant)
 
-## Phase 4 — v1.0 Release
+## Phase 6 — v1.0 Release
 
 **Goal:** freeze the architecture and declare it production-ready as a reference.
 
@@ -78,7 +129,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [ ] Website / docs site launched
 - [ ] v1.0 tagged; deprecation policy in force
 
-## Phase 5 — Ecosystem (v1.x)
+## Phase 7 — Ecosystem (v1.x)
 
 **Goal:** grow adoption and the surrounding ecosystem.
 
@@ -90,7 +141,7 @@ This roadmap describes the planned evolution of EASRA from initial draft to a st
 - [ ] Certification / conformance badge programme (via TSC)
 - [ ] Case studies from external adopters
 
-## Phase 6 — Research (parallel to all phases)
+## Phase 8 — Research (parallel to all phases)
 
 **Goal:** advance the state of the art in areas the current architecture reserves as extension points.
 

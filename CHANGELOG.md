@@ -4,6 +4,18 @@ All notable changes to EASRA are recorded here. The format is based on [Keep a C
 
 ## [Unreleased]
 
+### Added
+- Specification 011 — Capability Model (16 capability domains C0–C15, ~70 subcapabilities, 5-level maturity model, freezing rule).
+- Specification 012 — Component Catalogue (~60 components across L0–L15 plus cross-cutting substrate, with `K-L*-*` ID scheme and status legend).
+- `architectures/` folder with the five-view scaffold: `logical/`, `runtime/`, `deployment/`, `operational/`, `security/` (each with a README naming its diagrams and anchoring specs).
+- `diagrams/CATALOGUE.md` — authoritative inventory of the target ~25-diagram set with ID scheme D-<view><n> and status legend.
+- Diagram D-R1 — Master Runtime Execution Flow (`diagrams/runtime-execution-flow.md`), showing decision points, cache lookups, guardrails, model fallback, tool impact-class gating, verification verdicts, and streaming.
+
+### Changed
+- `specification/README.md` — reading-order table extended to specs 011 and 012.
+- `README.md` — adds "Five Architecture Views" section; references capability model, component catalogue, and diagram catalogue; updates repo structure block; reflects 12 numbered specs (was 10).
+- `ROADMAP.md` — restructured to reviewer-recommended process: Phase 1 Draft Spec (done), Phase 2 Capability & Component Freeze (mostly done), Phase 3 Complete 5-Architecture Diagram Set (~25 diagrams), Phase 4 Handbook, Phase 5 Cloud mappings, Phase 6 v1.0, Phase 7 Ecosystem, Phase 8 Research.
+
 ## [0.1.0] — 2026-07-05
 
 ### Added

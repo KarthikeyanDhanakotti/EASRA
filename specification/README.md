@@ -1,6 +1,6 @@
 # EASRA Specification Suite
 
-The `specification/` folder contains the ten numbered documents that formally define EASRA. They are the authoritative source of truth. Everything in `handbook/`, `diagrams/`, `examples/`, and `reference-implementation/` derives from these documents.
+The `specification/` folder contains the twelve numbered documents that formally define EASRA. They are the authoritative source of truth. Everything in `handbook/`, `architectures/`, `diagrams/`, `examples/`, and `reference-implementation/` derives from these documents.
 
 ## Reading order
 
@@ -16,6 +16,8 @@ The `specification/` folder contains the ten numbered documents that formally de
 | [008](./008-sequence-diagrams.md) | Sequence Diagrams | Reasoning about how requests execute. |
 | [009](./009-trust-boundaries.md) | Trust Boundaries | Threat-modelling or hardening. |
 | [010](./010-nfr.md) | Non-Functional Requirements | Setting SLOs or writing conformance criteria. |
+| [011](./011-capability-model.md) | Capability Model | Reading anywhere else in the repo, before any diagram. |
+| [012](./012-component-catalogue.md) | Component Catalogue | Contributing a diagram or a new component. |
 
 ## Editing the specification
 
