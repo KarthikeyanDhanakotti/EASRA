@@ -9,9 +9,91 @@
 
 *Version 0.1 (Draft) — 2026*
 
+[![License: Apache 2.0](https://img.shields.io/badge/Code%20License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Docs License: CC BY 4.0](https://img.shields.io/badge/Docs%20License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Version](https://img.shields.io/badge/version-0.1--draft-orange.svg)]()
+[![Status](https://img.shields.io/badge/status-draft-yellow.svg)]()
+[![Open Source](https://img.shields.io/badge/open%20source-yes-brightgreen.svg)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+[![Standards-Aligned](https://img.shields.io/badge/standards-NIST%20AI%20RMF%20·%20ISO%2042001%20·%20OWASP%20LLM-8A2BE2.svg)]()
+
 [Specification](./specification/) · [Architectures](./architectures/) · [Handbook](./handbook/) · [Implementations](./implementations/) · [Benchmarks](./benchmarks/) · [Security](./security-reference/) · [Verification](./verification-reference/) · [LLMOps](./llmops-guide/) · [Checklists](./checklists/) · [Templates](./templates/) · [ADRs](./adr/) · [Diagrams](./diagrams/CATALOGUE.md)
 
 </div>
+
+---
+
+## Project Status
+
+**Version:** 0.1 (Draft) · **License:** Apache-2.0 (code) + CC-BY-4.0 (docs) · **Governance:** Open, community-contributable
+
+| Deliverable | Status |
+|---|---|
+| Architecture Specification (12 numbered docs) | ✅ Draft available |
+| Layer Model (16 layers) | ✅ Draft available |
+| Runtime & Reference Architectures (5 views) | ✅ Draft available |
+| Capability Model & Component Catalogue | ✅ Frozen (v0.1) |
+| Diagram Catalogue | ✅ Inventory published |
+| Architecture Decision Records | ✅ Active |
+| Handbook (per-layer deep-dives) | 🚧 In progress |
+| Reference Implementation | 🚧 Planned |
+| Cloud Mappings (Azure / AWS / GCP) | 🚧 In progress |
+| Benchmarks | 🚧 Scaffolded |
+
+Full release plan: [ROADMAP.md](./ROADMAP.md).
+
+---
+
+## Architecture at a Glance
+
+```mermaid
+flowchart LR
+    U[User /<br/>Channels]
+    G[Gateway<br/>Identity · Rate Limit]
+    O[AI<br/>Orchestration]
+    MK[Memory ·<br/>Knowledge]
+    R[Model Router<br/>+ Models]
+    T[Tools /<br/>Actions]
+    V[Verification]
+    S[Guardrails<br/>& Safety]
+    Resp[Response]
+
+    U --> G --> O
+    O <--> MK
+    O --> R
+    O --> T
+    R --> V --> S --> Resp --> U
+
+    classDef entry fill:#EAF3FF,stroke:#3B7DDD,color:#0B1F3A;
+    classDef core  fill:#ECF0F1,stroke:#2C3E50,color:#0B1F3A;
+    classDef data  fill:#E8F8F5,stroke:#16A085,color:#0B1F3A;
+    classDef model fill:#F5EAF7,stroke:#8E44AD,color:#0B1F3A;
+    classDef sec   fill:#FDECEA,stroke:#C0392B,color:#0B1F3A;
+    class U,G,Resp entry
+    class O,T core
+    class MK data
+    class R model
+    class V,S sec
+```
+
+This is the simplified request path. The full 16-layer architecture — with cross-cutting Security, Governance, Observability, LLMOps, Cost and Value layers — is in [diagrams/high-level-architecture.md](./diagrams/high-level-architecture.md).
+
+---
+
+## Who is EASRA for?
+
+| Role | What you get from EASRA |
+|---|---|
+| 🏛 **Enterprise Architects** | A vendor-neutral reference model, capability model, and trust-boundary map for Enterprise AI. |
+| 🤖 **AI / ML Architects** | A layered decomposition of orchestration, memory, retrieval, model routing, verification. |
+| ⚙ **Platform Engineers** | Component catalogue, interface contracts, deployment and operational views. |
+| 💻 **Software Architects & Engineers** | Patterns, anti-patterns, sequence diagrams, and worked examples. |
+| 🛡 **Security Architects & Red Teams** | Threat catalogue (OWASP LLM, MITRE ATLAS), controls catalogue, threat-model templates. |
+| 📈 **Engineering / AI Platform Managers** | Roadmap language, staffing model, adoption checklists, conformance levels. |
+| 🔬 **Researchers & Standards Bodies** | An open, citable model to build on, critique, and extend. |
+| 🎓 **Students & Educators** | A single coherent architecture to teach production Enterprise AI. |
+
+If any of these describe you — EASRA is written for you.
 
 ---
 
@@ -21,7 +103,7 @@ Enterprise AI has moved from *"pick a model"* to *"design a distributed system"*
 
 There is no widely adopted, vendor-neutral reference architecture for that reality. Existing guidance is either vendor-specific (Azure/AWS/GCP architecture centres), framework-specific (LangChain, LlamaIndex, Semantic Kernel), or narrowly scoped (RAG, agents, LLMOps). Teams are left to reinvent the same architecture — memory placement, guardrails, model routing, cache planes, trust boundaries — over and over.
 
-**EASRA aims to be for Enterprise AI what TOGAF is for enterprise architecture and what the OSI model is for networking**: a common language, a layered model, explicit interfaces, and a body of patterns and anti-patterns that separates *architecture* from *implementation*.
+**EASRA draws inspiration from architectural reference frameworks such as TOGAF and layered models such as OSI**, providing a common architectural vocabulary and reference model for Enterprise AI: a layered decomposition, explicit interfaces, and a body of patterns and anti-patterns that separates *architecture* from *implementation*.
 
 ## What EASRA is
 
@@ -42,9 +124,9 @@ There is no widely adopted, vendor-neutral reference architecture for that reali
 - Not a replacement for TOGAF, NIST AI RMF, OWASP LLM Top 10, MITRE ATLAS, or OpenTelemetry — EASRA *complements* and *references* them.
 - Not a governance policy — EASRA gives the architectural surface on which policies operate.
 
-## Deliverables of the Standard
+## Deliverables
 
-EASRA is structured like an open architecture standard, not a repository of examples. It is intended to become the central place where architects, engineers, security teams, and researchers come to learn, contribute, and build Enterprise AI systems. It ships as ten distinct deliverables:
+EASRA is structured as an open reference architecture and community specification, not a repository of examples. It is intended to become the central place where architects, engineers, security teams, and researchers come to learn, contribute, and build Enterprise AI systems. It ships as ten distinct deliverables:
 
 | # | Deliverable | What it is | Status | Location |
 |---|-------------|------------|--------|----------|
@@ -153,6 +235,56 @@ EASRA/
 ## Status
 
 EASRA is a **draft** working toward v1.0. Interfaces and layer boundaries may change. See [CHANGELOG.md](./CHANGELOG.md) for revision history and [ROADMAP.md](./ROADMAP.md) for the release plan.
+
+## FAQ
+
+<details>
+<summary><b>Why another architecture? Isn't this a solved problem?</b></summary>
+
+No production-grade, vendor-neutral, publicly reviewable reference architecture exists for Enterprise AI. Cloud vendors publish architecture centres for their own stacks. Framework vendors publish patterns for their own frameworks. Analyst firms publish market maps. None of them define the *architectural surface* \u2014 layers, interfaces, capabilities, trust boundaries, NFRs \u2014 that a team can adopt independently of any vendor. EASRA fills that gap.
+</details>
+
+<details>
+<summary><b>How is EASRA different from LangChain, LlamaIndex, or Semantic Kernel?</b></summary>
+
+Those are **implementation frameworks**. EASRA is an **architecture**. LangChain answers *"how do I compose an agent in Python?"*. EASRA answers *"what layers, interfaces, and trust boundaries should exist in my platform, regardless of what framework I use?"*. You can implement EASRA using LangChain, Semantic Kernel, your own runtime, or none of them.
+</details>
+
+<details>
+<summary><b>Does EASRA replace TOGAF, NIST AI RMF, ISO 42001, or OWASP LLM Top 10?</b></summary>
+
+No. EASRA *complements* and *references* them. TOGAF defines enterprise-architecture methodology. NIST AI RMF and ISO 42001 define governance and risk-management frameworks. OWASP LLM Top 10 and MITRE ATLAS define threat taxonomies. EASRA gives you the architectural surface on which those methodologies, controls, and threats operate.
+</details>
+
+<details>
+<summary><b>Is EASRA Azure-specific? AWS-specific?</b></summary>
+
+No. The specification is intentionally vendor-neutral. The [`implementations/`](./implementations/) folder contains mappings to Azure, AWS, GCP, and open-source stacks so architects can see how each layer maps to concrete services on each cloud.
+</details>
+
+<details>
+<summary><b>Is EASRA only for LLM applications, or also for agents?</b></summary>
+
+Both. The layer model covers single-model applications, RAG systems, tool-use agents, and multi-agent systems. Agent-specific concerns \u2014 tool schemas, action authorisation, memory scoping, orchestration patterns \u2014 are first-class in Layers 2, 4, and 7.
+</details>
+
+<details>
+<summary><b>Can I use EASRA commercially?</b></summary>
+
+Yes. Code is Apache 2.0. Documentation, diagrams, and specifications are CC-BY-4.0. You can adopt, adapt, and build commercial products on top of EASRA \u2014 attribution appreciated.
+</details>
+
+<details>
+<summary><b>How do I contribute?</b></summary>
+
+Read [CONTRIBUTING.md](./CONTRIBUTING.md), open an issue, propose an [ADR](./adr/), or submit a PR against any deliverable. Design proposals, cloud mappings, worked examples, threat models, and reference-implementation code are all welcome.
+</details>
+
+<details>
+<summary><b>Is EASRA a standard?</b></summary>
+
+Not yet. EASRA is an **open reference architecture** and community specification. Standardisation is a governance milestone that requires broad adoption and multi-organisation stewardship \u2014 both future goals, not current claims.
+</details>
 
 ## Citing EASRA
 
