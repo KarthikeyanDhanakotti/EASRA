@@ -1,54 +1,107 @@
 # Changelog
 
-All notable changes to EASRA are recorded here. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project uses the versioning scheme defined in [GOVERNANCE.md](./GOVERNANCE.md).
+All notable changes to **EASRA** are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Planned (Sprint-02 remainder)
+- Draw.io sources for EA-001, EA-002, and EA-003
+- License finalization
+- Tagged pre-release `v0.2.0`
+
+---
+
+## [0.1.1] — 2026-07-12 — Sprint-02 Reference Standard
+
 ### Added
-- `docs/` — documentation-site folder with planned site map and tooling candidate matrix (MkDocs Material / Docusaurus / Nextra); ADR pending.
-- `checklists/` — six concrete, reviewable checklists: Repository Quality (20 items), Adoption Assessment (per-capability + NFR + boundary), Security Review (identity / injection / tool safety / data / model / verification / standards / sign-off), Verification Readiness (7 classes + metrics + golden sets + continuous + anti-patterns), LLMOps Readiness (delivery / lifecycles / evaluation / cost / observability / SLOs / incident / multi-region), and Standard Deliverables Status.
-- `templates/` — six reusable templates: GitHub Profile README (ready-to-paste), Repository Starter (`repository-template/`), Capability Maturity Statement, Threat Model, Benchmark Spec, Ecosystem Style Guide (writing / naming / diagrams / colour palette / logos / licensing / governance).
-- `implementations/` — vendor mapping guides for Azure, AWS, GCP, and open-source (Kubernetes + CNCF), each with per-layer + trust-boundary + NFR mapping and known-gap sections.
-- `benchmarks/` — benchmark categories (latency, throughput, cost, safety, verification, reliability, cache, continuous eval), reference workloads (W-SARAG / W-MAC / W-TOOL / W-STREAM / W-INJ / W-COST), and benchmark-spec skeleton.
-- `security-reference/` — threat catalogue (OWASP LLM Top 10 + MITRE ATLAS mapped to EASRA layers), controls catalogue, standards-mapping status, threat-model roster, red-team + incident-response outlines.
-- `verification-reference/` — verification-vs-evaluation contract, seven verification classes with checker catalogue, grounding metric definitions, golden-set methodology, continuous verification loop, anti-patterns.
-- `llmops-guide/` — reference delivery pipeline, prompt/model/tool lifecycles, evaluation strategy table, cost engineering, observability conventions, reference SLOs, AI-specific runbook roster.
-- `conference/` — talk deck / workshop / abstract slot list, suggested outlines for keynote / deep-dive / enterprise brief / half-day workshop, citation guidance.
-- Specification 011 — Capability Model (16 capability domains C0–C15, ~70 subcapabilities, 5-level maturity model, freezing rule).
-- Specification 012 — Component Catalogue (~60 components across L0–L15 plus cross-cutting substrate, with `K-L*-*` ID scheme and status legend).
-- `architectures/` folder with the five-view scaffold: `logical/`, `runtime/`, `deployment/`, `operational/`, `security/` (each with a README naming its diagrams and anchoring specs).
-- `diagrams/CATALOGUE.md` — authoritative inventory of the target ~25-diagram set with ID scheme D-<view><n> and status legend.
-- Diagram D-R1 — Master Runtime Execution Flow (`diagrams/runtime-execution-flow.md`), showing decision points, cache lookups, guardrails, model fallback, tool impact-class gating, verification verdicts, and streaming.
+- **EA-001 v1.0 — redesigned flagship diagram** with unified Fluent-style iconography, four labeled bands (Consumption · Control · Runtime & Data · Evidence), colored plane pills, right-side Governance pillar, refined typography, and 1920 × 1200 SVG canvas.
+  - `diagrams/EA-001-Enterprise-AI-Systems-Reference-Architecture-v1.svg`
+  - `diagrams/EA-001-Enterprise-AI-Systems-Reference-Architecture-v1.png`
+- **EA-003 · Runtime Plane (Agent Orchestration)** — third flagship architecture:
+  - `diagrams/EA-003-Runtime-Plane.svg` + `.png` — 4 bands (Orchestration · Execution · Tools & Actions · Memory & State) + HITL/Safety pillar
+  - `architectures/EA-003-Runtime-Plane.md` — full page (design goals, component detail, `POST /v1/runtime/tasks` interface contract, OTel `gen_ai.*` + `easra.*` observability contract, failure modes)
+- **Azure reference implementation** for EA-002 AI Gateway:
+  - `implementations/README.md` + `implementations/azure/README.md` — implementations index & Azure service palette
+  - `implementations/azure/ai-gateway/README.md` — overview, capability-to-service map, cost sketch, quick start
+  - `implementations/azure/ai-gateway/architecture.md` — mermaid diagram + stage-by-stage EA-002 → Azure mapping
+  - `implementations/azure/ai-gateway/bicep/` — `main.bicep` + modules (`apim`, `functions`, `redis`, `keyvault`, `loganalytics`) + `parameters/dev.bicepparam`
+  - `implementations/azure/ai-gateway/policies/` — `api-inbound.xml` (auth + quota + content safety), `fragment-pii-scrub.xml`, `fragment-cost-attribution.xml`
+  - `implementations/azure/ai-gateway/docs/deploy.md` — deployment guide
+  - `implementations/azure/ai-gateway/samples/router-policy.example.json` — router policy sample
 
 ### Changed
-- `README.md` — nav bar now includes Checklists and Templates; repo structure updated to include `docs/`, `checklists/`, `templates/`.
-- `ROADMAP.md` — Standard Deliverables table refreshed; added Cross-cutting artefact deliverables row for checklists, templates, and docs site.
-- `README.md` — repositioned EASRA as an **open architecture standard** with 10 explicit deliverables; adds Standard Deliverables table with status.
-- `specification/README.md` — reading-order table extended to specs 011 and 012.
-- `ROADMAP.md` — restructured to the reviewer-recommended process: Phase 1 Draft Spec, Phase 2 Capability & Component Freeze, Phase 3 Complete 5-Architecture Diagram Set, Phase 4 Handbook, Phase 5 Cloud mappings (partially done), Phase 6 v1.0, Phase 7 Ecosystem, Phase 8 Research.
+- `README.md` — hero image switched to EA-001 v1.0; new badges (EA-003, Azure impl); architecture map updated (EA-001 v1.0, EA-003 v0.1); repository layout reflects `architectures/EA-003-*.md`, v1 diagram filenames, and `implementations/azure/ai-gateway/`
+- `architectures/EA-001-Enterprise-AI-Systems.md` — points to v1.0 files as canonical; v0.0.1 kept as archive
+- `ROADMAP.md` — Sprint-02 marked ✅ Reference Standard with all deliverables; Sprint-03 focused on Knowledge/Verification/second cloud
+- `docs/README.md` — Architecture Views extended with EA-003 status
 
-## [0.1.0] — 2026-07-05
+---
+
+## [0.1.0] — 2026-07-12 — Sprint-02 Kickoff
 
 ### Added
-- Initial repository scaffold: `specification/`, `handbook/`, `diagrams/`, `examples/`, `reference-implementation/`, `adr/`, `research/`.
-- Dual-licensed under CC-BY-4.0 (docs) and Apache-2.0 (code).
-- Root documents: `README.md`, `CONTRIBUTING.md`, `GOVERNANCE.md`, `ROADMAP.md`, `CHANGELOG.md`, `.gitignore`.
-- Specification 001 — Introduction, Vision and Scope.
-- Specification 002 — Design Principles (P1–P10).
-- Specification 003 — Terminology (glossary of ~80 EASRA terms).
-- Specification 004 — Reference Architecture (16 logical layers).
-- Specification 005 — Layer Definitions (responsibilities, inputs, outputs, invariants per layer).
-- Specification 006 — Interface Specification (contracts between layers).
-- Specification 007 — Data Flow (request, response, cache, memory, tool, evaluation flows).
-- Specification 008 — Sequence Diagrams (six canonical request patterns).
-- Specification 009 — Trust Boundaries (four boundaries: Edge, Reasoning, Tool, Data).
-- Specification 010 — Non-Functional Requirements (latency, throughput, availability, safety, cost, compliance).
-- Diagrams: high-level architecture, trust boundaries, deployment topology, CI/CD pipeline, observability plane.
-- Handbook scaffolding for all 16 layers.
-- Worked example scaffolding for single-agent RAG.
-- Reference-implementation scaffold with conformance-test outline.
-- ADR-0000 template, ADR-0001 (Record architecture decisions), ADR-0002 (Vendor-neutral scope).
-- GitHub issue templates, PR template, and docs CI workflow.
+- **EA-002 · Enterprise AI Gateway** — the second flagship architecture:
+  - `diagrams/EA-002-Enterprise-AI-Gateway.svg` (hand-authored source)
+  - `diagrams/EA-002-Enterprise-AI-Gateway.png` (1600 × 1000 export)
+  - `architectures/EA-002-Enterprise-AI-Gateway.md` — full page: goals, 6-stage control path, cross-cutting stores, interface contract, observability contract, failure modes
+- **Capability Model v0.1** — the "biggest missing piece" per external review:
+  - `reference-models/capability-model.md` — 7 layers (Experience, Gateway, Runtime, Knowledge, Verification, Operations, Guardrails), ~60 capabilities, 5-level maturity scale, capability-to-architecture traceability
+- **Reference Models scaffold** (`reference-models/`)
+  - `README.md`, `capability-model.md` (full)
+  - `operating-model.md`, `deployment-model.md`, `governance-model.md`, `runtime-model.md` (Sprint-02 stubs)
+- **Pattern Catalog** (`patterns/`)
+  - `README.md` — template, catalog (PAT-001..PAT-010), relationship to architectures
+  - `PAT-001-AI-Gateway.md`, `PAT-002-Multi-Agent.md`, `PAT-003-Verification.md`, `PAT-004-Prompt-Intelligence.md` — all with context/problem/solution/interfaces/controls/KPIs/trade-offs/anti-patterns
+- **README redesigned** — "Architecture Standard" tone: what EASRA is / is not, flagship artifacts table, full EA-001..EA-008 architecture map, pattern catalog excerpt, reference models table, adopter quick-start
+- **Architecture badges** added: EA-001 flagship, EA-002 gateway, Capability Model v0.1
 
-[Unreleased]: https://github.com/KarthikeyanDhanakotti/EASRA/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/KarthikeyanDhanakotti/EASRA/releases/tag/v0.1.0
+### Changed
+- `README.md` — full rewrite to match Sprint-02 scope and reference-standard positioning
+- `ROADMAP.md` — restructured: Sprint-01 marked complete; Sprint-02 in progress; Sprint-03 = Runtime/Knowledge/Verification; Sprint-04 = Control/Guardrails/Observability → v1.0
+- `docs/README.md` — Architecture Views table extended to EA-002; new sections for Reference Models and Patterns
+
+### Notes
+- EA-002 is the reviewer-recommended next artifact and the "API Gateway of Enterprise AI".
+- Capability Model closes the reviewer-identified "biggest missing piece" gap.
+- Draw.io source files and Sprint-04 architectures (EA-003..EA-008) are tracked in [ROADMAP.md](ROADMAP.md).
+
+---
+
+## [0.0.2] — 2026-07-12
+
+### Added
+- **EA-001 · Enterprise AI Systems Reference Architecture** (Sprint-01 first-draft) — the flagship EASRA architecture:
+  - `diagrams/EA-001-Enterprise-AI-Systems-Reference-Architecture.svg` (hand-authored source)
+  - `diagrams/EA-001-Enterprise-AI-Systems-Reference-Architecture.png` (1600 × 1000 export)
+  - `architectures/EA-001-Enterprise-AI-Systems.md` — dedicated architecture page (purpose, seven planes, components, design principles, data flow, related architectures)
+- `docs/README.md` — documentation index with **Architecture Views** table (EA-001 → EA-006)
+- README hero: EA-001 diagram embedded immediately after title & badges, ahead of the Vision section
+- Repository layout updated to include new `architectures/` folder
+
+### Notes
+- EA-001 v0.0.1 is an **acknowledged first draft**. The canonical v1.0 diagram — with unified iconography, aligned spacing, higher-resolution SVG, and clearer separation of Control/Runtime/Data planes and Governance pillars — ships in Sprint-02 and will become the whitepaper/conference asset.
+
+---
+
+## [0.0.1] — Sprint-01 Foundation — 2026-07-12
+
+### Added
+- Initial repository structure: `docs/`, `diagrams/`, `assets/`, `.github/`
+- `README.md` — project overview, goals, non-goals, repo layout
+- `ROADMAP.md` — sprint plan and milestones
+- `CONTRIBUTING.md` — contribution workflow and standards
+- `CODE_OF_CONDUCT.md` — Contributor Covenant v2.1
+- `docs/architecture/overview.md` — 10-minute architecture tour (stub)
+- `docs/patterns/README.md` — pattern catalog index (stub)
+- `docs/decisions/0001-record-architecture-decisions.md` — ADR template & first ADR
+- `docs/glossary.md` — shared vocabulary
+- `.github/ISSUE_TEMPLATE/` — bug, feature, and question templates
+- `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist
+- `diagrams/README.md` and `assets/README.md` — placeholders
+
+### Notes
+- This is a **foundation package**, not a v1.0 release.
+- All architecture artifacts are stubs; production-quality versions ship in Sprint-02.
