@@ -1,305 +1,302 @@
-<div align="center">
-
 # EASRA
-### Enterprise AI Systems Reference Architecture
 
-**An open reference architecture for designing, building, operating, governing, securing, observing, and verifying production-grade Enterprise AI and Agentic AI systems.**
+**Enterprise AI Systems Reference Architecture**
 
-*Vendor-neutral · Standards-aligned · Community-governed*
+> The open, vendor-neutral reference standard for building, governing, and operating enterprise-grade AI systems.
 
-*Version 0.1 (Draft) — 2026*
+[![Status](https://img.shields.io/badge/status-active-brightgreen.svg)](#)
+[![Sprint](https://img.shields.io/badge/sprint-02-orange.svg)](ROADMAP.md)
+[![Flagship](https://img.shields.io/badge/EA--001-v1.0-8A2BE2.svg)](architectures/EA-001-Enterprise-AI-Systems.md)
+[![Gateway](https://img.shields.io/badge/EA--002-v0.1-0A84FF.svg)](architectures/EA-002-Enterprise-AI-Gateway.md)
+[![Runtime](https://img.shields.io/badge/EA--003-v0.1-7A5EC2.svg)](architectures/EA-003-Runtime-Plane.md)
+[![Azure%20Impl](https://img.shields.io/badge/impl-azure%2Fai--gateway-1F6FEB.svg)](implementations/azure/ai-gateway/README.md)
+[![Capability%20Model](https://img.shields.io/badge/capability%20model-v0.1-1F6FEB.svg)](reference-models/capability-model.md)
+[![License](https://img.shields.io/badge/license-TBD-lightgrey.svg)](#license)
 
-[![License: Apache 2.0](https://img.shields.io/badge/Code%20License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Docs License: CC BY 4.0](https://img.shields.io/badge/Docs%20License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Version](https://img.shields.io/badge/version-0.1--draft-orange.svg)]()
-[![Status](https://img.shields.io/badge/status-draft-yellow.svg)]()
-[![Open Source](https://img.shields.io/badge/open%20source-yes-brightgreen.svg)]()
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
-[![Standards-Aligned](https://img.shields.io/badge/standards-NIST%20AI%20RMF%20·%20ISO%2042001%20·%20OWASP%20LLM-8A2BE2.svg)]()
+![EA-001 Enterprise AI Systems Reference Architecture v1.0](diagrams/EA-001-Enterprise-AI-Systems-Reference-Architecture-v1.png)
 
-[Specification](./specification/) · [Architectures](./architectures/) · [Handbook](./handbook/) · [Implementations](./implementations/) · [Benchmarks](./benchmarks/) · [Security](./security-reference/) · [Verification](./verification-reference/) · [LLMOps](./llmops-guide/) · [Checklists](./checklists/) · [Templates](./templates/) · [ADRs](./adr/) · [Diagrams](./diagrams/CATALOGUE.md)
-
-</div>
+<sub>▲ **EA-001 v1.0 · Enterprise AI Systems Reference Architecture** — the flagship EASRA blueprint. Full page: [architectures/EA-001-Enterprise-AI-Systems.md](architectures/EA-001-Enterprise-AI-Systems.md).</sub>
 
 ---
 
-## Project Status
+## What EASRA Is
 
-**Version:** 0.1 (Draft) · **License:** Apache-2.0 (code) + CC-BY-4.0 (docs) · **Governance:** Open, community-contributable
+**EASRA is an open reference architecture and specification for designing, governing, deploying, and operating Enterprise AI systems.**
 
-| Deliverable | Status |
-|---|---|
-| Architecture Specification (12 numbered docs) | ✅ Draft available |
-| Layer Model (16 layers) | ✅ Draft available |
-| Runtime & Reference Architectures (5 views) | ✅ Draft available |
-| Capability Model & Component Catalogue | ✅ Frozen (v0.1) |
-| Diagram Catalogue | ✅ Inventory published |
-| Architecture Decision Records | ✅ Active |
-| Handbook (per-layer deep-dives) | 🚧 In progress |
-| Reference Implementation | 🚧 Planned |
-| Cloud Mappings (Azure / AWS / GCP) | 🚧 In progress |
-| Benchmarks | 🚧 Scaffolded |
+It is a **standard**, not a product and not a tutorial. Every deliverable belongs to one of seven typed artifact classes:
 
-Full release plan: [ROADMAP.md](./ROADMAP.md).
+| Prefix   | Artifact class          | Answers                                       |
+|----------|-------------------------|-----------------------------------------------|
+| `EA-xxx`   | Reference Architectures | *What are the target-state architectures?*   |
+| `RM-xxx`   | Reference Models        | *What lenses do we reason across?*           |
+| `PAT-xxx`  | Architecture Patterns   | *What reusable designs solve recurring problems?* |
+| `ADR-xxx`  | Architecture Decisions  | *Why did we choose what we chose?*           |
+| `SPEC-xxx` | Specifications          | *What are the normative contracts?*          |
+| `IMPL-xxx` | Reference Implementations | *How does it run on a real cloud?*         |
+| `CHK-xxx`  | Checklists              | *How do we verify readiness &amp; quality?*     |
 
----
+The **capability model**, **handbook**, and **conference assets** compose across these classes to make EASRA operable end-to-end.
 
-## Architecture at a Glance
+## Relation to Other Frameworks
 
-```mermaid
-flowchart LR
-    U[User /<br/>Channels]
-    G[Gateway<br/>Identity · Rate Limit]
-    O[AI<br/>Orchestration]
-    MK[Memory ·<br/>Knowledge]
-    R[Model Router<br/>+ Models]
-    T[Tools /<br/>Actions]
-    V[Verification]
-    S[Guardrails<br/>& Safety]
-    Resp[Response]
+EASRA is designed to stand on its own but draws on well-established sources of architectural thinking:
 
-    U --> G --> O
-    O <--> MK
-    O --> R
-    O --> T
-    R --> V --> S --> Resp --> U
+- **TOGAF** — for the discipline of capability-first architecture reasoning.
+- **Azure Architecture Center &amp; AWS Well-Architected** — for the shape of cloud-neutral reference guidance.
+- **OpenTelemetry** (`gen_ai.*` semantic conventions) — for the observability contract.
+- **NIST AI RMF, ISO 42001, EU AI Act** — for the controls-mapping layer.
+- **LangGraph, Microsoft Agent Framework, Semantic Kernel, MCP** — for concrete agent-runtime primitives.
 
-    classDef entry fill:#EAF3FF,stroke:#3B7DDD,color:#0B1F3A;
-    classDef core  fill:#ECF0F1,stroke:#2C3E50,color:#0B1F3A;
-    classDef data  fill:#E8F8F5,stroke:#16A085,color:#0B1F3A;
-    classDef model fill:#F5EAF7,stroke:#8E44AD,color:#0B1F3A;
-    classDef sec   fill:#FDECEA,stroke:#C0392B,color:#0B1F3A;
-    class U,G,Resp entry
-    class O,T core
-    class MK data
-    class R model
-    class V,S sec
-```
+Where any of these are directly cited, EASRA credits and adapts — it does not re-derive.
 
-This is the simplified request path. The full 16-layer architecture — with cross-cutting Security, Governance, Observability, LLMOps, Cost and Value layers — is in [diagrams/high-level-architecture.md](./diagrams/high-level-architecture.md).
+## What EASRA Is Not
+
+- **Not a vendor product.** Every capability is described in vendor-neutral terms.
+- **Not tied to one cloud, one model provider, or one framework.** Reference implementations for Azure, AWS, GCP, and Kubernetes will land under [`implementations/`](implementations/).
+- **Not a replacement for organization-specific security & compliance review.** It gives you the blueprint and the controls map; your controls team still owns approval.
 
 ---
 
-## Who is EASRA for?
+## Flagship Artifacts
 
-| Role | What you get from EASRA |
-|---|---|
-| 🏛 **Enterprise Architects** | A vendor-neutral reference model, capability model, and trust-boundary map for Enterprise AI. |
-| 🤖 **AI / ML Architects** | A layered decomposition of orchestration, memory, retrieval, model routing, verification. |
-| ⚙ **Platform Engineers** | Component catalogue, interface contracts, deployment and operational views. |
-| 💻 **Software Architects & Engineers** | Patterns, anti-patterns, sequence diagrams, and worked examples. |
-| 🛡 **Security Architects & Red Teams** | Threat catalogue (OWASP LLM, MITRE ATLAS), controls catalogue, threat-model templates. |
-| 📈 **Engineering / AI Platform Managers** | Roadmap language, staffing model, adoption checklists, conformance levels. |
-| 🔬 **Researchers & Standards Bodies** | An open, citable model to build on, critique, and extend. |
-| 🎓 **Students & Educators** | A single coherent architecture to teach production Enterprise AI. |
-
-If any of these describe you — EASRA is written for you.
+| Artifact | What it is | Where |
+|---|---|---|
+| **EA-001** — Enterprise AI Systems Reference Architecture | The 7-plane blueprint of an enterprise AI platform | [architectures/EA-001-Enterprise-AI-Systems.md](architectures/EA-001-Enterprise-AI-Systems.md) |
+| **EA-002** — Enterprise AI Gateway | The single policy-enforcing ingress for all AI traffic | [architectures/EA-002-Enterprise-AI-Gateway.md](architectures/EA-002-Enterprise-AI-Gateway.md) |
+| **Capability Model** | 7 layers, ~60 capabilities, 5-level maturity scale | [reference-models/capability-model.md](reference-models/capability-model.md) |
+| **Pattern Catalog** | Reusable designs (PAT-001…) with diagrams, KPIs, controls | [patterns/README.md](patterns/README.md) |
 
 ---
 
-## Why EASRA
+## Architecture Map
 
-Enterprise AI has moved from *"pick a model"* to *"design a distributed system"*. Production AI platforms now combine foundation models, retrieval, memory, agent orchestration, tool use, security, governance, observability, and verification — all under tight latency, cost, and compliance budgets.
+The full EASRA architecture set (15 views). Each view is a self-contained `EA-xxx` deliverable with diagram + page + interface + observability contracts + failure modes.
 
-There is no widely adopted, vendor-neutral reference architecture for that reality. Existing guidance is either vendor-specific (Azure/AWS/GCP architecture centres), framework-specific (LangChain, LlamaIndex, Semantic Kernel), or narrowly scoped (RAG, agents, LLMOps). Teams are left to reinvent the same architecture — memory placement, guardrails, model routing, cache planes, trust boundaries — over and over.
+| ID     | Architecture                                     | Capability layer | Status                    |
+|--------|--------------------------------------------------|------------------|---------------------------|
+| **EA-001** | [Enterprise AI Systems Reference Architecture](architectures/EA-001-Enterprise-AI-Systems.md) | All        | ✅ **v1.0 (Sprint-02)** |
+| **EA-002** | [Enterprise AI Gateway](architectures/EA-002-Enterprise-AI-Gateway.md) | L2 Gateway | ✅ v0.1.0               |
+| **EA-003** | [Runtime Plane](architectures/EA-003-Runtime-Plane.md) | L3 Runtime | ✅ **v0.1 (Sprint-02)** |
+| EA-004  | Control Plane                                   | L6 Operations    | ⏭️ Sprint-03           |
+| EA-005  | Knowledge Plane                                 | L4 Knowledge     | ⏭️ Sprint-03           |
+| EA-006  | Model Router                                    | L2 / L4          | ⏭️ Sprint-03           |
+| EA-007  | Prompt Intelligence                             | L2 / L7          | ⏭️ Sprint-03           |
+| EA-008  | Memory Plane                                    | L3               | ⏭️ Sprint-03           |
+| EA-009  | MCP / Tool Fabric                               | L3               | ⏭️ Sprint-03           |
+| EA-010  | Verification Plane                              | L5               | ⏭️ Sprint-03           |
+| EA-011  | Guardrails Plane                                | L7               | ⏳ Sprint-04           |
+| EA-012  | Observability Plane                             | L5 / L7          | ⏳ Sprint-04           |
+| EA-013  | Security &amp; Identity                             | L7               | ⏳ Sprint-04           |
+| EA-014  | Governance &amp; Compliance                         | L7               | ⏳ Sprint-04           |
+| EA-015  | Deployment Topologies                           | L6               | ⏳ Sprint-04           |
 
-**EASRA draws inspiration from architectural reference frameworks such as TOGAF and layered models such as OSI**, providing a common architectural vocabulary and reference model for Enterprise AI: a layered decomposition, explicit interfaces, and a body of patterns and anti-patterns that separates *architecture* from *implementation*.
+Track progress in [ROADMAP.md](ROADMAP.md).
 
-## What EASRA is
+---
 
-- **A layered reference architecture** — 16 logical layers with explicit responsibilities and interfaces.
-- **A capability model** — 16 frozen capability domains and their subcapabilities ([Spec 011](./specification/011-capability-model.md)).
-- **A component catalogue** — the frozen inventory of every named component with a stable ID scheme ([Spec 012](./specification/012-component-catalogue.md)).
-- **A specification suite** — 12 numbered specs (introduction, principles, terminology, reference architecture, layers, interfaces, data flow, sequences, trust boundaries, NFRs, capability model, component catalogue).
-- **Five architecture views** — Logical, Runtime, Deployment, Operational, Security ([architectures/](./architectures/)).
-- **A publication-quality diagram library** — inventoried in the [Diagram Catalogue](./diagrams/CATALOGUE.md) (target: ~25 diagrams across the five views).
-- **A handbook** — deep-dive per-layer chapters covering components, patterns, anti-patterns, failure modes, cloud mappings, and production checklists.
-- **A reference implementation** — an open-source, minimal, spec-compliant Enterprise AI system.
-- **A body of ADRs and research** — decision records and forward-looking work (execution compilers, verification frameworks, benchmarks).
+## Pattern Catalog
 
-## What EASRA is not
+| ID | Pattern | Layer | Status |
+|----|---------|-------|--------|
+| [PAT-001](patterns/PAT-001-AI-Gateway.md) | AI Gateway | L2 | 🟡 Draft |
+| [PAT-002](patterns/PAT-002-Multi-Agent.md) | Multi-Agent Orchestration | L3 | 🟡 Draft |
+| [PAT-003](patterns/PAT-003-Verification.md) | Verification Loop | L5 | 🟡 Draft |
+| [PAT-004](patterns/PAT-004-Prompt-Intelligence.md) | Prompt Intelligence | L2, L7 | 🟡 Draft |
+| [PAT-005](patterns/PAT-005-RAG.md) | Retrieval-Augmented Generation (RAG) | L2, L4 | 🌱 Stub |
+| [PAT-006](patterns/PAT-006-Memory.md) | Memory | L3 | 🌱 Stub |
+| [PAT-007](patterns/PAT-007-HITL.md) | Human-in-the-Loop | L3, L7 | 🌱 Stub |
+| [PAT-008](patterns/PAT-008-Router.md) | Model Router | L2, L6 | 🌱 Stub |
+| [PAT-009](patterns/PAT-009-Continuous-Eval.md) | Continuous Evaluation | L5 | 🌱 Stub |
+| [PAT-010](patterns/PAT-010-Feedback-Curation.md) | Feedback Curation | L5, L6 | 🌱 Stub |
 
-- Not a product, a framework, a runtime, or a hosted service.
-- Not tied to any LLM vendor, cloud provider, agent framework, or programming language.
-- Not a replacement for TOGAF, NIST AI RMF, OWASP LLM Top 10, MITRE ATLAS, or OpenTelemetry — EASRA *complements* and *references* them.
-- Not a governance policy — EASRA gives the architectural surface on which policies operate.
+Full catalog & template: [patterns/README.md](patterns/README.md).
 
-## Deliverables
+---
 
-EASRA is structured as an open reference architecture and community specification, not a repository of examples. It is intended to become the central place where architects, engineers, security teams, and researchers come to learn, contribute, and build Enterprise AI systems. It ships as ten distinct deliverables:
+## Architecture Decisions (ADRs)
 
-| # | Deliverable | What it is | Status | Location |
-|---|-------------|------------|--------|----------|
-| 1 | 📘 **Architecture Specification** | The 12 numbered normative specs (principles, layers, interfaces, capabilities, components, NFRs, trust boundaries). | Draft (v0.1) | [`specification/`](./specification/) |
-| 2 | 📖 **Handbook** | Per-layer engineering deep-dives (components, patterns, anti-patterns, failure modes, cloud mappings, checklists). | Scaffolded | [`handbook/`](./handbook/) |
-| 3 | 🏗 **Reference Architectures** | Five architecture views (Logical, Runtime, Deployment, Operational, Security) with ~25 catalogued diagrams. | Scaffolded | [`architectures/`](./architectures/) + [`diagrams/CATALOGUE.md`](./diagrams/CATALOGUE.md) |
-| 4 | ☁ **Cloud Implementations** | Concrete Azure / AWS / GCP / open-source mappings of every layer, component, and NFR. | Draft | [`implementations/`](./implementations/) |
-| 5 | 🧪 **Benchmarks** | Reproducible latency, cost, safety, verification, cache, and reliability measurements against standard workloads. | Scaffolded | [`benchmarks/`](./benchmarks/) |
-| 6 | 📊 **Architecture Decision Records** | Every structural decision recorded, reviewable, and reversible. | Active | [`adr/`](./adr/) |
-| 7 | 🛡 **Security Reference** | Threat catalogue (OWASP LLM, MITRE ATLAS), controls catalogue, standards mappings, threat models, red-team playbook. | Draft | [`security-reference/`](./security-reference/) |
-| 8 | 🔍 **AI Verification Reference** | The seven verification classes, reference checkers, grounding metrics, golden-set methodology, continuous verification. | Draft | [`verification-reference/`](./verification-reference/) |
-| 9 | 📈 **LLMOps Guide** | Delivery pipeline, prompt / model / tool lifecycles, evaluation strategy, cost engineering, incident response. | Draft | [`llmops-guide/`](./llmops-guide/) |
-| 10 | 🎓 **Conference & Community Materials** | Talk decks, workshops, abstracts — reusable under CC-BY-4.0. | Planned | [`conference/`](./conference/) |
+Every load-bearing choice in EASRA is captured as a [Nygard-style ADR](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions.html) under [`docs/decisions/`](docs/decisions/README.md).
 
-Roadmap for each deliverable is tracked in [ROADMAP.md](./ROADMAP.md).
+| ID | Decision | Status |
+|----|----------|--------|
+| [0001](docs/decisions/0001-record-architecture-decisions.md) | Record architecture decisions | 🟢 Accepted |
+| [0002](docs/decisions/0002-vendor-neutrality.md) | Vendor-neutrality principle | 🟢 Accepted |
+| [0003](docs/decisions/0003-verification-first.md) | Verification-first: no promotion without passing evals | 🟢 Accepted |
+| [0004](docs/decisions/0004-ai-gateway-sole-ingress.md) | AI Gateway is the sole ingress for model traffic | 🟢 Accepted |
+| [0005](docs/decisions/0005-prompt-registry.md) | Prompts are first-class deployable artifacts | 🟢 Accepted |
+| [0006](docs/decisions/0006-capability-model.md) | The 7-layer Capability Model is the canonical taxonomy | 🟢 Accepted |
+| [0007](docs/decisions/0007-otel-gen-ai.md) | OpenTelemetry `gen_ai.*` is the canonical observability contract | 🟢 Accepted |
+| [0008](docs/decisions/0008-mcp-tool-contract.md) | MCP is the canonical tool-server contract | 🟢 Accepted |
+| [0009](docs/decisions/0009-forget-contract.md) | Every memory tier must implement the Forget contract | 🟢 Accepted |
 
-## Core Design Principles
+---
 
-| # | Principle | One-line statement |
-|---|-----------|--------------------|
-| P1 | Vendor Neutrality | The architecture is defined in logical terms; every layer must map cleanly to at least two independent implementations. |
-| P2 | Security by Design | Zero-trust, least-privilege, and prompt-injection resistance are architectural — not add-on — concerns. |
-| P3 | Verification by Design | Every AI output is verifiable; verification is a first-class layer, distinct from evaluation. |
-| P4 | Observability by Default | Traces, metrics, logs, token/cost accounting, and agent/tool traces are emitted from every component. |
-| P5 | Loose Coupling | Layers communicate only through published interfaces; no layer depends on another's internals. |
-| P6 | Externalized State | Memory, sessions, and caches live outside compute; compute is stateless and horizontally scalable. |
-| P7 | Human-in-the-Loop | Every autonomous action has a defined escalation, override, and audit path. |
-| P8 | Failure Isolation | Failure in one layer degrades the system gracefully; no single layer can cascade a full outage. |
-| P9 | Cost Awareness | Token, compute, and storage cost are explicit design inputs, not afterthoughts. |
-| P10 | Evolvability | New models, tools, agents, and channels can be added without redesigning the architecture. |
+## Reference Models
 
-Full definitions live in [specification/002-design-principles.md](./specification/002-design-principles.md).
+The "thinking frames" of EASRA:
 
-## The 16 EASRA Layers
+| Model | Question it answers |
+|-------|----------------------|
+| [Capability Model](reference-models/capability-model.md) | *What capabilities does an enterprise AI platform need?* |
+| [Operating Model](reference-models/operating-model.md) | *Who owns what, and how is AI operated?* |
+| [Deployment Model](reference-models/deployment-model.md) | *Where does AI run — cloud, edge, on-prem, hybrid?* |
+| [Governance Model](reference-models/governance-model.md) | *How are policy, risk, safety decisions made and enforced?* |
+| [Runtime Model](reference-models/runtime-model.md) | *How does a single request execute end-to-end at runtime?* |
 
-```
-L0   Channels & User Experience
-L1   Edge · Gateway · Identity          ── Trust Boundary A ──
-L2   AI Orchestration
-L3   Prompt Intelligence
-L4   Memory & Context
-L5   Knowledge & Retrieval
-L6   AI Models & Model Router
-L7   Tooling & Actions (MCP, APIs)
-L8   Guardrails & Safety                ── Trust Boundary B ──
-L9   Verification
-L10  Observability & Evaluation
-L11  Performance, Caching & Cost
-L12  LLMOps & Delivery (CI/CD)
-L13  Security & Zero Trust               (cross-cutting)
-L14  Governance, Risk & Compliance       (cross-cutting)
-L15  Business Outcomes & Value
-```
+---
 
-The full high-level architecture diagram is in [diagrams/high-level-architecture.md](./diagrams/high-level-architecture.md). The complete diagram inventory across all five views is in the [Diagram Catalogue](./diagrams/CATALOGUE.md).
-
-## The Five Architecture Views
-
-EASRA is described through five architecture views, each answering different questions for a different audience. All views derive from the frozen [Capability Model](./specification/011-capability-model.md) and reference only components in the [Component Catalogue](./specification/012-component-catalogue.md).
-
-| View | Answers | Audience | Folder |
-|------|---------|----------|--------|
-| **Logical** | What are the parts and how do they compose? | Architects | [architectures/logical/](./architectures/logical/) |
-| **Runtime** | How does a request execute across the parts? | Engineers, SREs | [architectures/runtime/](./architectures/runtime/) |
-| **Deployment** | Where does each part run, and how is it scaled? | Platform, SRE | [architectures/deployment/](./architectures/deployment/) |
-| **Operational** | How is the system observed, evaluated, delivered? | SRE, LLMOps | [architectures/operational/](./architectures/operational/) |
-| **Security** | What are the trust boundaries and controls? | Security, Audit | [architectures/security/](./architectures/security/) |
-
-See [architectures/README.md](./architectures/README.md) for the full view.
-
-## Repository Structure
+## Repository Layout
 
 ```
 EASRA/
-├── docs/                     Documentation-site config and assets (planned MkDocs / Docusaurus / Nextra)
-├── specification/            12 numbered specification documents (001–012)
-├── architectures/            Five architecture views (logical, runtime, deployment, operational, security)
-├── handbook/                 Per-layer chapters and cross-cutting guides
-├── diagrams/                 Publication-grade Mermaid + drawio diagrams (see CATALOGUE.md)
-├── implementations/          Azure / AWS / GCP / open-source realisations
-├── benchmarks/               Reproducible latency, cost, safety, verification measurements
-├── security-reference/       Threats, controls, standards mappings, threat models, red-team
-├── verification-reference/   Verification classes, checkers, metrics, golden-set methodology
-├── llmops-guide/             Delivery, lifecycle, evaluation strategy, cost, incident response
-├── checklists/               Repository-quality, adoption, security, verification, LLMOps checklists
-├── templates/                Profile README, repo starter, style guide, adopter templates
-├── examples/                 Worked example architectures (single-agent, multi-agent, RAG, tool-use)
-├── reference-implementation/ Minimal spec-compliant open-source implementation
-├── adr/                      Architecture Decision Records
-├── research/                 Forward-looking work (compilers, verification, benchmarks)
-├── conference/               Talk decks, workshops, tutorials
-├── CONTRIBUTING.md
-├── GOVERNANCE.md
+├── README.md
 ├── ROADMAP.md
 ├── CHANGELOG.md
-└── LICENSE                   Apache-2.0 (code) + CC-BY-4.0 (docs)
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+│
+├── architectures/          ← canonical EA-xxx architecture pages
+│   ├── README.md               ← architecture map & index
+│   ├── EA-001-Enterprise-AI-Systems.md
+│   ├── EA-002-Enterprise-AI-Gateway.md
+│   ├── EA-003-Runtime-Plane.md
+│   ├── EA-004-Control-Plane.md         ← stub (Sprint-03)
+│   ├── EA-005-Knowledge-Plane.md       ← stub (Sprint-03)
+│   ├── EA-006-Model-Router.md          ← stub (Sprint-03)
+│   ├── EA-007-Prompt-Intelligence.md   ← stub (Sprint-03)
+│   ├── EA-008-Memory-Plane.md          ← stub (Sprint-03)
+│   ├── EA-009-MCP-Tool-Fabric.md       ← stub (Sprint-03)
+│   └── EA-010-Verification-Plane.md    ← stub (Sprint-03)
+│
+├── reference-models/       ← capability / operating / deployment / governance / runtime models
+│   ├── capability-model.md
+│   ├── operating-model.md
+│   ├── deployment-model.md
+│   ├── governance-model.md
+│   └── runtime-model.md
+│
+├── patterns/               ← PAT-xxx reusable pattern catalog
+│   ├── README.md
+│   ├── PAT-001-AI-Gateway.md
+│   ├── PAT-002-Multi-Agent.md
+│   ├── PAT-003-Verification.md
+│   ├── PAT-004-Prompt-Intelligence.md
+│   ├── PAT-005-RAG.md
+│   ├── PAT-006-Memory.md
+│   ├── PAT-007-HITL.md
+│   ├── PAT-008-Router.md
+│   ├── PAT-009-Continuous-Eval.md
+│   └── PAT-010-Feedback-Curation.md
+│
+├── diagrams/               ← source (SVG / .drawio) + PNG exports
+│   ├── EA-001-Enterprise-AI-Systems-Reference-Architecture-v1.svg
+│   ├── EA-001-Enterprise-AI-Systems-Reference-Architecture-v1.png
+│   ├── EA-002-Enterprise-AI-Gateway.svg
+│   ├── EA-002-Enterprise-AI-Gateway.png
+│   ├── EA-003-Runtime-Plane.svg
+│   └── EA-003-Runtime-Plane.png
+│
+├── docs/                   ← guides, decisions, glossary
+│   ├── README.md
+│   └── decisions/          ← ADR-xxxx (Nygard style)
+│       ├── README.md               ← decisions index
+│       ├── 0000-template.md
+│       ├── 0001-record-architecture-decisions.md
+│       ├── 0002-vendor-neutrality.md
+│       ├── 0003-verification-first.md
+│       ├── 0004-ai-gateway-sole-ingress.md
+│       ├── 0005-prompt-registry.md
+│       ├── 0006-capability-model.md
+│       ├── 0007-otel-gen-ai.md
+│       ├── 0008-mcp-tool-contract.md
+│       └── 0009-forget-contract.md
+│
+├── specification/          ← formal EASRA specification (numbered)
+├── handbook/               ← L00–L07 practitioner handbook
+├── benchmarks/             ← performance / cost / quality / grounding
+├── checklists/             ← adoption & review checklists
+├── conference/             ← whitepaper, decision book, slides
+├── examples/               ← illustrative samples
+├── implementations/        ← concrete cloud implementations
+│   ├── README.md
+│   └── azure/
+│       └── ai-gateway/     ← EA-002 on Azure: APIM + Functions + Redis + Foundry
+├── reference-implementation/
+├── security-reference/
+├── verification-reference/
+├── llmops-guide/
+├── research/
+├── templates/
+├── assets/                 ← logos, banners, images
+└── .github/                ← issue & PR templates
 ```
 
-## Getting Started
+---
 
-- **If you are an architect** → start with [specification/001-introduction.md](./specification/001-introduction.md), then [004-reference-architecture.md](./specification/004-reference-architecture.md).
-- **If you are an engineer** → start with [diagrams/high-level-architecture.md](./diagrams/high-level-architecture.md), then [005-layer-definitions.md](./specification/005-layer-definitions.md).
-- **If you are evaluating EASRA for adoption** → read the [ROADMAP](./ROADMAP.md) and [GOVERNANCE](./GOVERNANCE.md).
-- **If you want to contribute** → read [CONTRIBUTING.md](./CONTRIBUTING.md) and pick an [open ADR](./adr/).
+## Quick Start (for readers)
 
-## Status
+1. Read the flagship: **[EA-001 · Enterprise AI Systems Reference Architecture](architectures/EA-001-Enterprise-AI-Systems.md)**
+2. Read the gateway: **[EA-002 · Enterprise AI Gateway](architectures/EA-002-Enterprise-AI-Gateway.md)**
+3. Score your enterprise: **[Capability Model](reference-models/capability-model.md)** (7 layers × 5 maturity levels)
+4. Browse reusable designs: **[Pattern Catalog](patterns/README.md)**
+5. Track progress: **[ROADMAP.md](ROADMAP.md)**
 
-EASRA is a **draft** working toward v1.0. Interfaces and layer boundaries may change. See [CHANGELOG.md](./CHANGELOG.md) for revision history and [ROADMAP.md](./ROADMAP.md) for the release plan.
+## Quick Start (for adopters)
 
-## FAQ
+- **CTO / Chief Architect:** score your org on the [Capability Model](reference-models/capability-model.md) → derive a 12-month roadmap → pick 3 patterns to standardize first.
+- **Platform team:** implement [PAT-001 · AI Gateway](patterns/PAT-001-AI-Gateway.md) as your first EASRA-aligned build.
+- **Risk / Governance:** map internal controls to [Capability Model → L7 Guardrails](reference-models/capability-model.md).
+- **Product team:** align on the L1 Experience and L3 Runtime capabilities before you scope your next AI feature.
 
-<details>
-<summary><b>Why another architecture? Isn't this a solved problem?</b></summary>
+---
 
-No production-grade, vendor-neutral, publicly reviewable reference architecture exists for Enterprise AI. Cloud vendors publish architecture centres for their own stacks. Framework vendors publish patterns for their own frameworks. Analyst firms publish market maps. None of them define the *architectural surface* \u2014 layers, interfaces, capabilities, trust boundaries, NFRs \u2014 that a team can adopt independently of any vendor. EASRA fills that gap.
-</details>
+## Roadmap Highlights
 
-<details>
-<summary><b>How is EASRA different from LangChain, LlamaIndex, or Semantic Kernel?</b></summary>
+**Sprint-02 — landed**
+- ✅ EA-001 v1.0 (redesigned flagship blueprint)
+- ✅ EA-002 v0.1 Enterprise AI Gateway
+- ✅ EA-003 v0.1 Runtime Plane
+- ✅ Capability Model v0.1 (7 layers × ~60 capabilities × 5 maturity levels)
+- ✅ Pattern catalog PAT-001..PAT-004 drafted
+- ✅ **Reviewer response:** taxonomy formalization (7 artifact classes), 15-view architecture map, ADR corpus (0001..0009), stubs for EA-004..EA-010 and PAT-005..PAT-010
+- ✅ First reference implementation scaffolded — Azure AI Gateway
 
-Those are **implementation frameworks**. EASRA is an **architecture**. LangChain answers *"how do I compose an agent in Python?"*. EASRA answers *"what layers, interfaces, and trust boundaries should exist in my platform, regardless of what framework I use?"*. You can implement EASRA using LangChain, Semantic Kernel, your own runtime, or none of them.
-</details>
+**Sprint-03**
+- Promote EA-004..EA-010 stubs to canonical v0.1 pages
+- Fill in pattern bodies for PAT-005..PAT-010 (RAG, Memory, HITL, Router, Continuous Eval, Feedback Curation)
+- Add IMPL-azure-runtime and IMPL-aws-gateway reference implementations
+- Expanded benchmarks (performance · cost · latency · quality · grounding · verification · agent · security)
 
-<details>
-<summary><b>Does EASRA replace TOGAF, NIST AI RMF, ISO 42001, or OWASP LLM Top 10?</b></summary>
+**Sprint-04**
+- EA-011..EA-015: Guardrails, Observability, Security & Identity, Governance & Compliance, Deployment Topologies
+- AWS + GCP + Kubernetes reference implementations
+- GitHub Pages docs site
+- **v1.0** tagged release + Architecture Whitepaper + Architecture Decision Book
 
-No. EASRA *complements* and *references* them. TOGAF defines enterprise-architecture methodology. NIST AI RMF and ISO 42001 define governance and risk-management frameworks. OWASP LLM Top 10 and MITRE ATLAS define threat taxonomies. EASRA gives you the architectural surface on which those methodologies, controls, and threats operate.
-</details>
+Full plan: [ROADMAP.md](ROADMAP.md).
 
-<details>
-<summary><b>Is EASRA Azure-specific? AWS-specific?</b></summary>
+---
 
-No. The specification is intentionally vendor-neutral. The [`implementations/`](./implementations/) folder contains mappings to Azure, AWS, GCP, and open-source stacks so architects can see how each layer maps to concrete services on each cloud.
-</details>
+## Relation to the legacy `/adr/` folder
 
-<details>
-<summary><b>Is EASRA only for LLM applications, or also for agents?</b></summary>
+Early Sprint-01 draft ADRs lived under `/adr/` (MADR-format). From Sprint-02 onward, all ADRs live under [`docs/decisions/`](docs/decisions/README.md) in Nygard style. The legacy folder is retained until Sprint-03 for reference and will then be removed.
 
-Both. The layer model covers single-model applications, RAG systems, tool-use agents, and multi-agent systems. Agent-specific concerns \u2014 tool schemas, action authorisation, memory scoping, orchestration patterns \u2014 are first-class in Layers 2, 4, and 7.
-</details>
+---
 
-<details>
-<summary><b>Can I use EASRA commercially?</b></summary>
+## Contributing
 
-Yes. Code is Apache 2.0. Documentation, diagrams, and specifications are CC-BY-4.0. You can adopt, adapt, and build commercial products on top of EASRA \u2014 attribution appreciated.
-</details>
+We welcome issues, discussions, and PRs. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before opening a PR.
 
-<details>
-<summary><b>How do I contribute?</b></summary>
-
-Read [CONTRIBUTING.md](./CONTRIBUTING.md), open an issue, propose an [ADR](./adr/), or submit a PR against any deliverable. Design proposals, cloud mappings, worked examples, threat models, and reference-implementation code are all welcome.
-</details>
-
-<details>
-<summary><b>Is EASRA a standard?</b></summary>
-
-Not yet. EASRA is an **open reference architecture** and community specification. Standardisation is a governance milestone that requires broad adoption and multi-organisation stewardship \u2014 both future goals, not current claims.
-</details>
-
-## Citing EASRA
-
-```
-Karthikeyan Dhanakotti. (2026). Enterprise AI Systems Reference Architecture (EASRA), v0.1.
-https://github.com/KarthikeyanDhanakotti/EASRA
-```
+Open PRs against **`Develop`**.
 
 ## License
 
-- **Documentation, specifications, diagrams**: [Creative Commons Attribution 4.0 (CC-BY-4.0)](./LICENSE)
-- **Code and reference implementation**: [Apache License 2.0](./LICENSE)
+License **TBD** — will be finalized before the v1.0 tag. Until then, treat the contents as *"all rights reserved, view-only"* unless the maintainer states otherwise in writing.
 
 ## Maintainer
 
-**Karthikeyan Dhanakotti** — [@KarthikeyanDhanakotti](https://github.com/KarthikeyanDhanakotti)
+- **Karthikeyan Dhanakotti** ([@KarthikeyanDhanakotti](https://github.com/KarthikeyanDhanakotti))
 
-Contributions, issues, and design proposals are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md).
+---
+
+*EASRA is an independent, community-driven reference standard. It is not affiliated with or endorsed by any vendor.*

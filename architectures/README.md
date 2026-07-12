@@ -1,51 +1,51 @@
-# EASRA Architectures — Five Views
+# EASRA Architecture Map
 
-EASRA is described through **five architecture views**, each answering a different set of questions and speaking to a different audience. Together they turn the 16-layer logical model into a system engineers, operators, security architects, and auditors can build, run, and defend.
+**Architectures** (`EA-`) are canonical, capability-driven blueprints of the EASRA reference. Each page is vendor-neutral, maps to one or more layers of the [Capability Model](../reference-models/capability-model.md), and is realized by one or more [Patterns](../patterns/README.md) and [Implementations](../implementations/README.md).
 
-The views are derived from — and consistent with — the frozen [Capability Model](../specification/011-capability-model.md), the [Component Catalogue](../specification/012-component-catalogue.md), and the [Interface Specification](../specification/006-interface-specification.md). Every diagram in [`../diagrams/`](../diagrams/) belongs to exactly one view and is inventoried in the [Diagram Catalogue](../diagrams/CATALOGUE.md).
+See [ADR-002 · Vendor-neutrality](../docs/decisions/0002-vendor-neutrality.md) and [ADR-006 · Capability Model](../docs/decisions/0006-capability-model.md) for the governance rules that shape these pages.
 
-## The five views
+## Catalog
 
-| View | Answers | Primary audience | Sub-folder |
-|------|---------|------------------|------------|
-| **Logical Architecture** | *What are the parts, how do they compose, and what does each do?* | Architects, senior engineers | [logical/](./logical/) |
-| **Runtime Architecture** | *How does a request execute, step by step, across those parts?* | Engineers, SREs, evaluators | [runtime/](./runtime/) |
-| **Deployment Architecture** | *Where does each part run, and how is it scaled and made resilient?* | Platform engineers, SREs | [deployment/](./deployment/) |
-| **Operational Architecture** | *How is the system observed, evaluated, delivered, and evolved safely?* | SREs, LLMOps, quality engineers | [operational/](./operational/) |
-| **Security Architecture** | *What are the trust boundaries, threats, controls, and audit paths?* | Security architects, auditors | [security/](./security/) |
+| ID     | Architecture                                                        | Layer(s)                    | Status         |
+|--------|---------------------------------------------------------------------|-----------------------------|----------------|
+| EA-001 | [Enterprise AI Systems — Reference Model](EA-001-Enterprise-AI-Systems.md) | L1–L7 (system-level)         | 🟢 Canonical (v0.1) |
+| EA-002 | [Enterprise AI Gateway](EA-002-Enterprise-AI-Gateway.md)             | L2 Orchestration / L7 Foundation | 🟢 Canonical (v0.1) |
+| EA-003 | [Runtime Plane](EA-003-Runtime-Plane.md)                             | L3 Runtime                   | 🟢 Canonical (v0.1) |
+| EA-004 | [Control Plane](EA-004-Control-Plane.md)                             | L6 Control                   | 🌱 Stub (Sprint-03) |
+| EA-005 | [Knowledge Plane](EA-005-Knowledge-Plane.md)                         | L4 Knowledge                 | 🌱 Stub (Sprint-03) |
+| EA-006 | [Model Router](EA-006-Model-Router.md)                               | L2 Orchestration             | 🌱 Stub (Sprint-03) |
+| EA-007 | [Prompt Intelligence](EA-007-Prompt-Intelligence.md)                 | L2 Orchestration             | 🌱 Stub (Sprint-03) |
+| EA-008 | [Memory Plane](EA-008-Memory-Plane.md)                               | L3 Runtime                   | 🌱 Stub (Sprint-03) |
+| EA-009 | [MCP / Tool Fabric](EA-009-MCP-Tool-Fabric.md)                       | L3 Runtime                   | 🌱 Stub (Sprint-03) |
+| EA-010 | [Verification Plane](EA-010-Verification-Plane.md)                   | L5 Verification              | 🌱 Stub (Sprint-03) |
 
-## How the views relate
+## Legend
 
-- The **Logical view** is the source of truth for structure. Every other view is a projection of it.
-- The **Runtime view** describes execution over the logical structure.
-- The **Deployment view** places the logical structure onto physical / cloud substrate.
-- The **Operational view** describes the control loops around the deployed runtime.
-- The **Security view** overlays trust boundaries and controls on all four.
+- 🟢 **Canonical** — v0.1+ published, reviewed, considered stable within the sprint.
+- 🌱 **Stub** — placeholder page committed so the taxonomy is complete; body lands in Sprint-03.
+- 🟡 **Draft** — being written, subject to change.
+
+## Relationships
 
 ```
-                        ┌────────────────────────────┐
-                        │       Logical View          │
-                        │  (structure — source of truth) │
-                        └──────────────┬─────────────┘
-                                       │
-       ┌───────────────┬───────────────┼───────────────┬───────────────┐
-       ▼               ▼               ▼               ▼               ▼
- ┌───────────┐  ┌───────────┐  ┌───────────────┐  ┌────────────┐  ┌───────────┐
- │  Runtime  │  │Deployment │  │  Operational   │  │  Security  │  │ (future)  │
- │  view     │  │  view     │  │  view          │  │  view      │  │ views     │
- └───────────┘  └───────────┘  └───────────────┘  └────────────┘  └───────────┘
+                     EA-001 · Enterprise AI Systems
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │                     │                     │
+    EA-002 Gateway       EA-003 Runtime        EA-004 Control
+        │                     │                     │
+   ┌────┼────┐          ┌─────┼─────┐          (registries,
+   │    │    │          │     │     │           policy,
+ EA-006 EA-007 …    EA-008 EA-009 EA-010     promotion,
+ Router  Prompt-I   Memory Tool-F Verify       cost)
+                                     │
+                              EA-005 Knowledge
 ```
 
-## Scope guardrails
+## Adding a new architecture
 
-- A view **adds no capability** that is not in the [Capability Model](../specification/011-capability-model.md).
-- A view **references no component** that is not in the [Component Catalogue](../specification/012-component-catalogue.md).
-- A diagram belongs to **exactly one view**. Cross-view relationships are described in prose, not by placing a diagram in two folders.
-
-## Reading order
-
-1. [Logical Architecture](./logical/) — read this first; it is the frame every other view sits inside.
-2. [Runtime Architecture](./runtime/) — read next if you build features.
-3. [Deployment Architecture](./deployment/) — read next if you run the system.
-4. [Operational Architecture](./operational/) — read alongside deployment.
-5. [Security Architecture](./security/) — read alongside all of the above; do not defer it.
+1. Reserve the next `EA-NNN` in this table with the status set to 🌱 Stub.
+2. Create `EA-NNN-<Slug>.md` from the stub template (see any Sprint-02 stub in this folder).
+3. Add an entry to the [top-level Architecture Map](../README.md).
+4. Map the new architecture to at least one layer in the [Capability Model](../reference-models/capability-model.md).
+5. If the architecture introduces a design principle, propose an ADR under [`docs/decisions/`](../docs/decisions/README.md).
