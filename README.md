@@ -94,17 +94,40 @@ Track progress in [ROADMAP.md](ROADMAP.md).
 
 ---
 
-## Pattern Catalog (excerpt)
+## Pattern Catalog
 
-| ID | Pattern | Layer |
-|----|---------|-------|
-| [PAT-001](patterns/PAT-001-AI-Gateway.md) | AI Gateway | L2 |
-| [PAT-002](patterns/PAT-002-Multi-Agent.md) | Multi-Agent Orchestration | L3 |
-| [PAT-003](patterns/PAT-003-Verification.md) | Verification Loop | L5 |
-| [PAT-004](patterns/PAT-004-Prompt-Intelligence.md) | Prompt Intelligence | L2, L7 |
-| PAT-005 … PAT-010 | RAG · HITL · Router · Guardrailed Tool Use · Continuous Eval · Feedback Curation | *(planned)* |
+| ID | Pattern | Layer | Status |
+|----|---------|-------|--------|
+| [PAT-001](patterns/PAT-001-AI-Gateway.md) | AI Gateway | L2 | 🟡 Draft |
+| [PAT-002](patterns/PAT-002-Multi-Agent.md) | Multi-Agent Orchestration | L3 | 🟡 Draft |
+| [PAT-003](patterns/PAT-003-Verification.md) | Verification Loop | L5 | 🟡 Draft |
+| [PAT-004](patterns/PAT-004-Prompt-Intelligence.md) | Prompt Intelligence | L2, L7 | 🟡 Draft |
+| [PAT-005](patterns/PAT-005-RAG.md) | Retrieval-Augmented Generation (RAG) | L2, L4 | 🌱 Stub |
+| [PAT-006](patterns/PAT-006-Memory.md) | Memory | L3 | 🌱 Stub |
+| [PAT-007](patterns/PAT-007-HITL.md) | Human-in-the-Loop | L3, L7 | 🌱 Stub |
+| [PAT-008](patterns/PAT-008-Router.md) | Model Router | L2, L6 | 🌱 Stub |
+| [PAT-009](patterns/PAT-009-Continuous-Eval.md) | Continuous Evaluation | L5 | 🌱 Stub |
+| [PAT-010](patterns/PAT-010-Feedback-Curation.md) | Feedback Curation | L5, L6 | 🌱 Stub |
 
 Full catalog & template: [patterns/README.md](patterns/README.md).
+
+---
+
+## Architecture Decisions (ADRs)
+
+Every load-bearing choice in EASRA is captured as a [Nygard-style ADR](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions.html) under [`docs/decisions/`](docs/decisions/README.md).
+
+| ID | Decision | Status |
+|----|----------|--------|
+| [0001](docs/decisions/0001-record-architecture-decisions.md) | Record architecture decisions | 🟢 Accepted |
+| [0002](docs/decisions/0002-vendor-neutrality.md) | Vendor-neutrality principle | 🟢 Accepted |
+| [0003](docs/decisions/0003-verification-first.md) | Verification-first: no promotion without passing evals | 🟢 Accepted |
+| [0004](docs/decisions/0004-ai-gateway-sole-ingress.md) | AI Gateway is the sole ingress for model traffic | 🟢 Accepted |
+| [0005](docs/decisions/0005-prompt-registry.md) | Prompts are first-class deployable artifacts | 🟢 Accepted |
+| [0006](docs/decisions/0006-capability-model.md) | The 7-layer Capability Model is the canonical taxonomy | 🟢 Accepted |
+| [0007](docs/decisions/0007-otel-gen-ai.md) | OpenTelemetry `gen_ai.*` is the canonical observability contract | 🟢 Accepted |
+| [0008](docs/decisions/0008-mcp-tool-contract.md) | MCP is the canonical tool-server contract | 🟢 Accepted |
+| [0009](docs/decisions/0009-forget-contract.md) | Every memory tier must implement the Forget contract | 🟢 Accepted |
 
 ---
 
@@ -133,9 +156,17 @@ EASRA/
 ├── CODE_OF_CONDUCT.md
 │
 ├── architectures/          ← canonical EA-xxx architecture pages
+│   ├── README.md               ← architecture map & index
 │   ├── EA-001-Enterprise-AI-Systems.md
 │   ├── EA-002-Enterprise-AI-Gateway.md
-│   └── EA-003-Runtime-Plane.md
+│   ├── EA-003-Runtime-Plane.md
+│   ├── EA-004-Control-Plane.md         ← stub (Sprint-03)
+│   ├── EA-005-Knowledge-Plane.md       ← stub (Sprint-03)
+│   ├── EA-006-Model-Router.md          ← stub (Sprint-03)
+│   ├── EA-007-Prompt-Intelligence.md   ← stub (Sprint-03)
+│   ├── EA-008-Memory-Plane.md          ← stub (Sprint-03)
+│   ├── EA-009-MCP-Tool-Fabric.md       ← stub (Sprint-03)
+│   └── EA-010-Verification-Plane.md    ← stub (Sprint-03)
 │
 ├── reference-models/       ← capability / operating / deployment / governance / runtime models
 │   ├── capability-model.md
@@ -149,7 +180,13 @@ EASRA/
 │   ├── PAT-001-AI-Gateway.md
 │   ├── PAT-002-Multi-Agent.md
 │   ├── PAT-003-Verification.md
-│   └── PAT-004-Prompt-Intelligence.md
+│   ├── PAT-004-Prompt-Intelligence.md
+│   ├── PAT-005-RAG.md
+│   ├── PAT-006-Memory.md
+│   ├── PAT-007-HITL.md
+│   ├── PAT-008-Router.md
+│   ├── PAT-009-Continuous-Eval.md
+│   └── PAT-010-Feedback-Curation.md
 │
 ├── diagrams/               ← source (SVG / .drawio) + PNG exports
 │   ├── EA-001-Enterprise-AI-Systems-Reference-Architecture-v1.svg
@@ -161,10 +198,18 @@ EASRA/
 │
 ├── docs/                   ← guides, decisions, glossary
 │   ├── README.md
-│   ├── architecture/
-│   ├── patterns/
-│   ├── decisions/          ← ADRs
-│   └── glossary.md
+│   └── decisions/          ← ADR-xxxx (Nygard style)
+│       ├── README.md               ← decisions index
+│       ├── 0000-template.md
+│       ├── 0001-record-architecture-decisions.md
+│       ├── 0002-vendor-neutrality.md
+│       ├── 0003-verification-first.md
+│       ├── 0004-ai-gateway-sole-ingress.md
+│       ├── 0005-prompt-registry.md
+│       ├── 0006-capability-model.md
+│       ├── 0007-otel-gen-ai.md
+│       ├── 0008-mcp-tool-contract.md
+│       └── 0009-forget-contract.md
 │
 ├── specification/          ← formal EASRA specification (numbered)
 ├── handbook/               ← L00–L07 practitioner handbook
@@ -207,26 +252,34 @@ EASRA/
 
 ## Roadmap Highlights
 
-**Sprint-02 (in progress)**
-- ✅ EA-002 Enterprise AI Gateway (this release)
-- ✅ Capability Model v0.1
-- ✅ Pattern catalog (PAT-001..PAT-004)
-- ⏭️ Redesigned EA-001 with unified Fluent-style iconography
-- ⏭️ Draw.io sources for EA-001 and EA-002
-- ⏭️ First reference implementation (Azure)
+**Sprint-02 — landed**
+- ✅ EA-001 v1.0 (redesigned flagship blueprint)
+- ✅ EA-002 v0.1 Enterprise AI Gateway
+- ✅ EA-003 v0.1 Runtime Plane
+- ✅ Capability Model v0.1 (7 layers × ~60 capabilities × 5 maturity levels)
+- ✅ Pattern catalog PAT-001..PAT-004 drafted
+- ✅ **Reviewer response:** taxonomy formalization (7 artifact classes), 15-view architecture map, ADR corpus (0001..0009), stubs for EA-004..EA-010 and PAT-005..PAT-010
+- ✅ First reference implementation scaffolded — Azure AI Gateway
 
 **Sprint-03**
-- EA-003 Runtime Plane, EA-005 Knowledge Plane, EA-006 Verification Plane
-- Complete pattern catalog (PAT-005..PAT-010)
+- Promote EA-004..EA-010 stubs to canonical v0.1 pages
+- Fill in pattern bodies for PAT-005..PAT-010 (RAG, Memory, HITL, Router, Continuous Eval, Feedback Curation)
+- Add IMPL-azure-runtime and IMPL-aws-gateway reference implementations
 - Expanded benchmarks (performance · cost · latency · quality · grounding · verification · agent · security)
 
 **Sprint-04**
-- EA-004 Control Plane, EA-007 Guardrails Plane, EA-008 Observability Plane
+- EA-011..EA-015: Guardrails, Observability, Security & Identity, Governance & Compliance, Deployment Topologies
 - AWS + GCP + Kubernetes reference implementations
 - GitHub Pages docs site
 - **v1.0** tagged release + Architecture Whitepaper + Architecture Decision Book
 
 Full plan: [ROADMAP.md](ROADMAP.md).
+
+---
+
+## Relation to the legacy `/adr/` folder
+
+Early Sprint-01 draft ADRs lived under `/adr/` (MADR-format). From Sprint-02 onward, all ADRs live under [`docs/decisions/`](docs/decisions/README.md) in Nygard style. The legacy folder is retained until Sprint-03 for reference and will then be removed.
 
 ---
 
