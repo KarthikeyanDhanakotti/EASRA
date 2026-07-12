@@ -14,6 +14,22 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+## [0.1.2] — 2026-07-12 — Sprint-02 Reviewer Response
+
+### Changed
+- **README repositioned** — dropped the "Think of it as *TOGAF for enterprise AI*" line per external review. EASRA now stands on its own as *"an open reference architecture and specification for designing, governing, deploying, and operating Enterprise AI systems."*
+- **README — new EASRA Taxonomy section** — formal artifact classes: `EA-` Reference Architectures, `RM-` Reference Models, `PAT-` Architecture Patterns, `ADR-` Architecture Decisions, `SPEC-` Specifications, `IMPL-` Reference Implementations, `CHK-` Checklists.
+- **README — new "Relation to Other Frameworks" section** — acknowledges TOGAF, Azure Architecture Center, AWS Well-Architected, OpenTelemetry, NIST AI RMF, ISO 42001, EU AI Act, LangGraph, Microsoft Agent Framework, Semantic Kernel, MCP.
+- **Architecture map expanded to 15 views (EA-001..EA-015)** — Control Plane, Knowledge Plane, Model Router, Prompt Intelligence, Memory Plane, MCP/Tool Fabric, Verification Plane, Guardrails Plane, Observability Plane, Security & Identity, Governance & Compliance, Deployment Topologies scheduled across Sprint-03 & Sprint-04.
+- **ROADMAP Sprint-03** rewritten to the reviewer-aligned plan: add 7 architecture views (EA-004..EA-010), complete pattern catalog (PAT-005..PAT-010), grow ADRs to ~20, second cloud implementation begins.
+- **`reference-models/capability-model.md`** — softened TOGAF reference to a neutral comparison.
+- **`reference-models/README.md`** — same treatment.
+
+### Notes
+- External review score progression: 9.1 → **9.5**. Reviewer's biggest recommendation ("stop thinking of EASRA as documentation, start thinking of it as a standard") is now baked into the taxonomy.
+
+---
+
 ## [0.1.1] — 2026-07-12 — Sprint-02 Reference Standard
 
 ### Added

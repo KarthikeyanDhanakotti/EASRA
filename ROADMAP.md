@@ -40,15 +40,43 @@ Legend: ✅ done · 🟡 in progress · ⏭️ next · ⏳ planned
 
 ---
 
-## Sprint-03 — Knowledge, Verification, Second Cloud ⏭️
+## Sprint-03 — Fifteen Architectures + Pattern Catalog Completion ⏭️
 
+**Goal (reviewer-aligned):** Expand from 3 to **15 architecture views**, complete the pattern catalog, and grow the ADR corpus toward ~20 decisions. Second cloud implementation begins.
+
+**Architecture Views (add 7 in Sprint-03)**
+- ⏭️ **EA-004 Control Plane** — model registry, lifecycle, rollout, quota governance
 - ⏭️ **EA-005 Knowledge Plane** — corpora, retrieval, features, data contracts
-- ⏭️ **EA-006 Verification Plane** — tracing, offline/online eval, curation
-- ⏭️ Complete pattern catalog **PAT-005..PAT-010** (RAG, HITL, Router, Guardrailed Tool Use, Continuous Eval, Feedback Curation)
-- ⏭️ **Operating / Deployment / Runtime models** fleshed out
-- ⏭️ Expanded benchmarks (`benchmarks/performance` · `cost` · `latency` · `quality` · `grounding` · `verification` · `agent` · `security`)
-- ⏭️ **Azure Runtime Plane implementation** (`implementations/azure/runtime-plane/`) using Durable Functions + Foundry Agents
-- ⏭️ **AWS reference implementation** for the AI Gateway
+- ⏭️ **EA-006 Model Router** — routing policy, cost/latency/fallback graphs
+- ⏭️ **EA-007 Prompt Intelligence** — classification, PII, jailbreak scoring, prompt registry
+- ⏭️ **EA-008 Memory Plane** — working/session/long-term/vector tiers, forget contract
+- ⏭️ **EA-009 MCP / Tool Fabric** — tool registry, MCP servers, sandbox, egress policy
+- ⏭️ **EA-010 Verification Plane** — offline eval, online eval, dataset curation, graders
+
+**Patterns (complete catalog PAT-005..PAT-010)**
+- ⏭️ PAT-005 RAG · PAT-006 Memory · PAT-007 HITL · PAT-008 Router · PAT-009 Continuous Eval · PAT-010 Feedback Curation
+
+**ADRs (grow to ~20)**
+- ⏭️ ADR-002 Vendor-neutrality principle
+- ⏭️ ADR-003 Verification-first (fail-closed on eval regression)
+- ⏭️ ADR-004 AI Gateway as sole ingress
+- ⏭️ ADR-005 Prompt Registry
+- ⏭️ ADR-006 Capability Model (7 layers)
+- ⏭️ ADR-007 OTel `gen_ai.*` as canonical observability
+- ⏭️ ADR-008 MCP as tool-server contract
+- ⏭️ ADR-009 Forget contract for all memory tiers
+- ⏭️ ADR-010..020 (follow-on decisions as work lands)
+
+**Reference Models**
+- ⏭️ **Operating / Deployment / Runtime models** fleshed out (each becomes a full `RM-xxx` document)
+
+**Implementations**
+- ⏭️ **Azure Runtime Plane** (`implementations/azure/runtime-plane/`) using Durable Functions + Foundry Agents
+- ⏭️ **AWS reference implementation** for the AI Gateway (`implementations/aws/ai-gateway/`)
+
+**Governance**
+- ⏭️ Formal taxonomy applied across the repo (`EA-`, `RM-`, `PAT-`, `ADR-`, `SPEC-`, `IMPL-`, `CHK-`)
+- ⏭️ Removed "TOGAF for" positioning language; EASRA stands on its own with a "Relation to other frameworks" section
 
 ---
 

@@ -21,15 +21,33 @@
 
 ## What EASRA Is
 
-EASRA is a **reference standard**, not a product and not a tutorial. It defines:
+**EASRA is an open reference architecture and specification for designing, governing, deploying, and operating Enterprise AI systems.**
 
-- The **architectures** (EA-xxx) an enterprise needs to run AI safely and at scale.
-- The **capability model** (7 layers, ~60 capabilities) to measure where you stand today.
-- The **patterns** (PAT-xxx) to build the pieces reusably.
-- The **reference models** (capability · operating · deployment · governance · runtime) to reason across them.
-- The **specification, handbook, checklists, and ADRs** to make the whole thing operable.
+It is a **standard**, not a product and not a tutorial. Every deliverable belongs to one of seven typed artifact classes:
 
-Think of it as *TOGAF for enterprise AI*, informed by *Azure Architecture Center*, *OpenTelemetry*, and modern agent frameworks.
+| Prefix   | Artifact class          | Answers                                       |
+|----------|-------------------------|-----------------------------------------------|
+| `EA-xxx`   | Reference Architectures | *What are the target-state architectures?*   |
+| `RM-xxx`   | Reference Models        | *What lenses do we reason across?*           |
+| `PAT-xxx`  | Architecture Patterns   | *What reusable designs solve recurring problems?* |
+| `ADR-xxx`  | Architecture Decisions  | *Why did we choose what we chose?*           |
+| `SPEC-xxx` | Specifications          | *What are the normative contracts?*          |
+| `IMPL-xxx` | Reference Implementations | *How does it run on a real cloud?*         |
+| `CHK-xxx`  | Checklists              | *How do we verify readiness &amp; quality?*     |
+
+The **capability model**, **handbook**, and **conference assets** compose across these classes to make EASRA operable end-to-end.
+
+## Relation to Other Frameworks
+
+EASRA is designed to stand on its own but draws on well-established sources of architectural thinking:
+
+- **TOGAF** — for the discipline of capability-first architecture reasoning.
+- **Azure Architecture Center &amp; AWS Well-Architected** — for the shape of cloud-neutral reference guidance.
+- **OpenTelemetry** (`gen_ai.*` semantic conventions) — for the observability contract.
+- **NIST AI RMF, ISO 42001, EU AI Act** — for the controls-mapping layer.
+- **LangGraph, Microsoft Agent Framework, Semantic Kernel, MCP** — for concrete agent-runtime primitives.
+
+Where any of these are directly cited, EASRA credits and adapts — it does not re-derive.
 
 ## What EASRA Is Not
 
@@ -52,18 +70,25 @@ Think of it as *TOGAF for enterprise AI*, informed by *Azure Architecture Center
 
 ## Architecture Map
 
-The full EASRA architecture set:
+The full EASRA architecture set (15 views). Each view is a self-contained `EA-xxx` deliverable with diagram + page + interface + observability contracts + failure modes.
 
-| ID | Architecture | Capability layer | Status |
-|----|--------------|-------------------|--------|
-| **EA-001** | [Enterprise AI Systems Reference Architecture](architectures/EA-001-Enterprise-AI-Systems.md) | All | ✅ **v1.0 (Sprint-02)** |
-| **EA-002** | [Enterprise AI Gateway](architectures/EA-002-Enterprise-AI-Gateway.md) | L2 Gateway | ✅ v0.1.0 |
+| ID     | Architecture                                     | Capability layer | Status                    |
+|--------|--------------------------------------------------|------------------|---------------------------|
+| **EA-001** | [Enterprise AI Systems Reference Architecture](architectures/EA-001-Enterprise-AI-Systems.md) | All        | ✅ **v1.0 (Sprint-02)** |
+| **EA-002** | [Enterprise AI Gateway](architectures/EA-002-Enterprise-AI-Gateway.md) | L2 Gateway | ✅ v0.1.0               |
 | **EA-003** | [Runtime Plane](architectures/EA-003-Runtime-Plane.md) | L3 Runtime | ✅ **v0.1 (Sprint-02)** |
-| **EA-004** | Control Plane | L6 Operations | ⏳ Planned |
-| **EA-005** | Knowledge Plane | L4 Knowledge | ⏳ Planned |
-| **EA-006** | Verification Plane | L5 Verification | ⏳ Planned |
-| **EA-007** | Guardrails Plane | L7 Guardrails | ⏳ Planned |
-| **EA-008** | Observability Plane | L5 + L7 | ⏳ Planned |
+| EA-004  | Control Plane                                   | L6 Operations    | ⏭️ Sprint-03           |
+| EA-005  | Knowledge Plane                                 | L4 Knowledge     | ⏭️ Sprint-03           |
+| EA-006  | Model Router                                    | L2 / L4          | ⏭️ Sprint-03           |
+| EA-007  | Prompt Intelligence                             | L2 / L7          | ⏭️ Sprint-03           |
+| EA-008  | Memory Plane                                    | L3               | ⏭️ Sprint-03           |
+| EA-009  | MCP / Tool Fabric                               | L3               | ⏭️ Sprint-03           |
+| EA-010  | Verification Plane                              | L5               | ⏭️ Sprint-03           |
+| EA-011  | Guardrails Plane                                | L7               | ⏳ Sprint-04           |
+| EA-012  | Observability Plane                             | L5 / L7          | ⏳ Sprint-04           |
+| EA-013  | Security &amp; Identity                             | L7               | ⏳ Sprint-04           |
+| EA-014  | Governance &amp; Compliance                         | L7               | ⏳ Sprint-04           |
+| EA-015  | Deployment Topologies                           | L6               | ⏳ Sprint-04           |
 
 Track progress in [ROADMAP.md](ROADMAP.md).
 
